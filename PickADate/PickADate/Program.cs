@@ -10,7 +10,8 @@ namespace PickADate
     {
         static void Main(string[] args)
         {
-            // TBD
+            Console.WriteLine("Today??");
+            Console.ReadLine();
         }
     }
 }
