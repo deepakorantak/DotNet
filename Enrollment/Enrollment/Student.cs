@@ -11,13 +11,14 @@ namespace Enrollment
         List<string> name;
         List<int> age;
         List<float> grade;
+        StudentStatistics studentstats;
 
         public Student()
         {
             name = new List<string>();
             age = new List<int>();
             grade = new List<float>();
-
+            studentstats = new StudentStatistics();
         }
 
         public void AddStudent(string iName, int iage, float igrade)
@@ -28,32 +29,40 @@ namespace Enrollment
 
         }
 
-        public StudentStatistics ComputeStatistics()
+        public void ComputeStatistics()
         {
-            StudentStatistics  stats = new StudentStatistics();
             float sumAge = 0,sumGrade = 0;
+            studentstats.MaxGrade = StudentStatistics.MinFloatValue;
+            studentstats.MinGrade = StudentStatistics.MaxFloatValue;
 
-            foreach (int ag in age)
+            for (int i = 0; i < age.Count; i++)
             {
-                sumAge += ag;
+                 sumAge += age[i];
+                 sumGrade += grade[i];
+                 studentstats.MaxGrade = Math.Max(grade[i], studentstats.MaxGrade);
+                 studentstats.MinGrade = Math.Min(grade[i], studentstats.MinGrade);
             }
-
-            stats.MaxGrade = StudentStatistics.MinFloatValue;
-            stats.MinGrade = StudentStatistics.MaxFloatValue;
-
-            foreach (float gr in grade)
-            {
-                sumGrade += gr;
-                stats.MaxGrade = Math.Max(gr, stats.MaxGrade);
-                stats.MinGrade = Math.Min(gr, stats.MinGrade);
-            }
-
-            stats.AverageAge = sumAge / age.Count;
-            stats.AverageGrade = sumGrade / grade.Count;
             
+            studentstats.AverageAge = sumAge / age.Count;
+            studentstats.AverageGrade = sumGrade / grade.Count;           
 
-            return stats;
+        }
 
+        public void PrintStudentInfo()
+        {
+
+            for (int i = 0; i < name.Count; i++)
+            {
+                Console.WriteLine("Name : " + name[i] + " Age : " + age[i] + " Grade : "+ grade[i]);
+            }
+           
+            Console.WriteLine("Max Grade : " + studentstats.MaxGrade);
+            Console.WriteLine("Min Grade : " + studentstats.MinGrade);
+            Console.WriteLine("Average Grade : " + studentstats.AverageGrade);
+            Console.WriteLine("Average Age : " + Math.Ceiling(studentstats.AverageAge));
+
+            Console.WriteLine("Press any key to continue !!");
+            Console.ReadLine();
         }
 
     }
