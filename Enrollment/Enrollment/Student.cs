@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Enrollment
 {
-    class Student
+    public class Student
     {
-        List<string> name;
-        List<int> age;
-        List<float> grade;
-        StudentStatistics studentstats;
+        private List<string> name;
+        private List<int> age;
+        private List<float> grade;
+        public StudentStatistics studentstats;
 
         public Student()
         {
