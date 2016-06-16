@@ -8,9 +8,9 @@ namespace Enrollment
 {
     public class Student
     {
-        private List<string> name;
-        private List<int> age;
-        private List<float> grade;
+        public List<int> age;
+        public List<float> grade;
+        public List<string> name;
         public StudentStatistics studentstats;
 
         public Student()

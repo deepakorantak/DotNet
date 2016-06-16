@@ -24,5 +24,66 @@ namespace Enrollment.Test
             Assert.AreEqual(stud1.studentstats.AverageAge, 18.5f);
 
         }
+        [TestMethod]
+        public void TestReferenceTypes()
+        {
+            Student s1 = new Student();
+            Student s2 = s1;
+
+            s1.name.Add("Deepa");
+
+            Assert.AreEqual(s1.name, s2.name);
+
+            s1 = new Student();
+
+            s1.name.Add("Gauri");
+            Assert.AreNotEqual(s1.name, s2.name);
+            
+        }
+
+        [TestMethod]
+        public void TestValueTypes()
+        {
+            int x1 = 2;
+            int x2 = x1;
+            Assert.AreEqual(x1,x2);
+
+            x1 = 5;
+
+            Assert.AreNotEqual(x1, x2);
+        }
+
+        [TestMethod]
+        public void TestPassReferenceTypes()
+        {
+            Student s1 = new Student();
+            Student s2 = s1;
+            AssignName(s1);
+
+            Assert.AreEqual(s1.name, s2.name);
+
+            s2 = new Student();
+            Assert.AreNotEqual(s1.name, s2.name);
+                    }
+
+        public void AssignName(Student x)
+        {
+            x.name.Add("Name changed");
+        }
+
+        [TestMethod]
+        public void TestPassValueTypes()
+        {
+            int x1 = 4;
+            int x2 = x1;
+
+            AssignValue(x1);
+            Assert.AreEqual(x1, x2);
+        }
+
+        public void AssignValue(int x)
+        {
+            x = 10;
+        }
     }
 }
