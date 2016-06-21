@@ -52,14 +52,38 @@ namespace DataTypes
         }
 
         [TestMethod]
-        public void TestStringType()
+        public void TestStringTypeMutable()
         {
             string text = "test1";
-            text.ToUpper();
+            text = text.ToUpper();
 
             Assert.AreEqual("TEST1", text);
 
         }
-        
+
+
+        [TestMethod]
+        public void TestIntTypeMutable()
+        {
+            int val = 4;
+            string valText = val.ToString();
+
+            Assert.AreEqual("4".GetType(),valText.GetType());
+            Assert.AreEqual("4", valText);
+
+        }
+
+        [TestMethod]
+        public void TestDataTypeMutable()
+        {
+            DateTime curDate = new DateTime(1995,12,2);
+            curDate = curDate.AddYears(1);
+
+            Assert.AreEqual(1996,curDate.Year);
+
+        }
+
+
+
     }
 }
