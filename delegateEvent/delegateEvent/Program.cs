@@ -10,11 +10,7 @@ namespace delegateEvent
     {
         static void Main(string[] args)
         {
-            
-
-            //event PrintDelegate p2;
-
-        // printer += Print;
+           
            PrintDelegate printer = new PrintDelegate(Print);
            printer += Print2;
 

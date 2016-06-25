@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace delegateEvent
 {
-    class PrintDelegateEventArgs : EventArgs
+    public class PrintDelegateEventArgs : EventArgs
     {
         public string printString { get; set; }
     }
