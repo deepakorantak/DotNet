@@ -27,6 +27,7 @@ namespace PropertiesVsFields
 
         public static void PrintLine(object sender, PrintDelegateEventArgs arg1)
         {
+            Console.WriteLine("Sender Object : "+ sender.ToString());
             Console.WriteLine("Printer O/P : "+arg1.printString );
         }
     }

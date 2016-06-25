@@ -17,18 +17,24 @@ namespace PropertiesVsFields
             }
             set
             {
-                if(!string.IsNullOrEmpty(value) && value.IndexOf(" ")>0)
+                PrintDelegateEventArgs arg1 = new PrintDelegateEventArgs();
+
+                if (!string.IsNullOrEmpty(value) && value.IndexOf(" ") > 0)
                 {
 
-                    PrintDelegateEventArgs arg1 = new PrintDelegateEventArgs();
                     arg1.printString = $"Name changed from {Name} to {value}";
-                    printName(this, arg1);
+                    firstName = value.Substring(0, value.IndexOf(" ")).Trim();
+                    lastName = value.Substring(value.IndexOf(" ") + 1).Trim();
+                }
 
-                    firstName = value.Substring(0,value.IndexOf(" ")).Trim();
-                    lastName = value.Substring(value.IndexOf(" ")+1).Trim();
-                             
+                else
+                {
+                    arg1.printString = $"Name did not changed from {Name} to {value}.Either null or did not contain space";
 
                 }
+                       printName(this, arg1);
+
+
             }
         }    
         private string firstName,lastName;
