@@ -1,4 +1,5 @@
-﻿using System;
+﻿using delegateEvent;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,14 @@ namespace PropertiesVsFields
             {
                 if(!string.IsNullOrEmpty(value) && value.IndexOf(" ")>0)
                 {
+
+                    PrintDelegateEventArgs arg1 = new PrintDelegateEventArgs();
+                    arg1.printString = $"Name changed from {Name} to {value}";
+                    printName(this, arg1);
+
                     firstName = value.Substring(0,value.IndexOf(" ")).Trim();
                     lastName = value.Substring(value.IndexOf(" ")+1).Trim();
+                             
 
                 }
             }
@@ -30,7 +37,10 @@ namespace PropertiesVsFields
         {
             firstName = ifirstName;
             lastName = ilastName;
+            
 
         }
+
+        public event PrintDelegate printName;
     }
 }

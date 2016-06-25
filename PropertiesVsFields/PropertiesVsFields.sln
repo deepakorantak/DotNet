@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertiesVsFields", "PropertiesVsFields\PropertiesVsFields.csproj", "{9ED6310B-534A-461D-B2FA-A960D1038857}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "delegateEvent", "..\delegateEvent\delegateEvent\delegateEvent.csproj", "{A9AF581A-45A1-4D07-B3A4-D62DFE67CFF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9ED6310B-534A-461D-B2FA-A960D1038857}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ED6310B-534A-461D-B2FA-A960D1038857}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9ED6310B-534A-461D-B2FA-A960D1038857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9AF581A-45A1-4D07-B3A4-D62DFE67CFF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9AF581A-45A1-4D07-B3A4-D62DFE67CFF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9AF581A-45A1-4D07-B3A4-D62DFE67CFF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9AF581A-45A1-4D07-B3A4-D62DFE67CFF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
