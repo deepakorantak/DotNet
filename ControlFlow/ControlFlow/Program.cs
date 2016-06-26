@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ControlFlow
+namespace ControlFlowException
 {
     class Program
     {
@@ -19,16 +19,7 @@ namespace ControlFlow
         {
 
             PopulateList();
-            try
-            {
-                AverageRainFall();
-            }
-            catch (floatDivisorZero ex)
-            {
-                Console.WriteLine("Exception Caught : " + ex.Message);
-                //throw;
-            }
-
+            AverageRainFall();
             CalcRainFallGrade();
             PrintRainFall();
 
@@ -39,12 +30,12 @@ namespace ControlFlow
         static void PopulateList()
         {
             rainfall = new List<int>();
-            rainfall.Add(100);
+            /*rainfall.Add(100);
             rainfall.Add(112);
             rainfall.Add(130);
             rainfall.Add(120);
             rainfall.Add(90);
-            rainfall.Add(80);
+            rainfall.Add(80);*/
         }
 
         static void AverageRainFall()
@@ -54,10 +45,17 @@ namespace ControlFlow
             {
                 avgRainfall += rainfall[i];
             }
-
-            if (rainfall.Count == 0)
+            try
             {
-                throw floatDivisorZero;
+                if (rainfall.Count == 0)
+                {
+                    throw floatDivisorZero;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception Caught : " + ex.Message);
+                throw;
             }
             avgRainfall = avgRainfall / rainfall.Count;
         }
