@@ -8,60 +8,63 @@ namespace ControlFlow
 {
     class Program
     {
-        static List<int> rainfall ;
+        static List<int> rainfall;
         static float avgRainfall = 0;
         static string gradeRainfall;
         static string gradeGradeNameRainFall;
+        static Exception floatDivisorZero = new Exception("Dividing a Float By Zero");
 
-        
+
         static void Main(string[] args)
         {
-            PopulateList();
-            AverageRainFall();
-            CalcRainFallGrade();
 
-            Console.WriteLine($"Average Rain Fall : {avgRainfall} , Grade : {gradeGradeNameRainFall} Rain Fall");                   
-           
+            PopulateList();
+            try
+            {
+                AverageRainFall();
+            }
+            catch (floatDivisorZero ex)
+            {
+                Console.WriteLine("Exception Caught : " + ex.Message);
+                //throw;
+            }
+
+            CalcRainFallGrade();
+            PrintRainFall();
+
+            Console.WriteLine($"Average Rain Fall : {avgRainfall} , Grade : {gradeGradeNameRainFall} Rain Fall");
+
         }
 
         static void PopulateList()
         {
             rainfall = new List<int>();
-           /* rainfall.Add(100);
+            rainfall.Add(100);
             rainfall.Add(112);
             rainfall.Add(130);
             rainfall.Add(120);
             rainfall.Add(90);
-            rainfall.Add(80);*/
+            rainfall.Add(80);
         }
 
         static void AverageRainFall()
         {
-            
+
             for (int i = 0; i < rainfall.Count; i++)
             {
                 avgRainfall += rainfall[i];
             }
 
-            try
+            if (rainfall.Count == 0)
             {
-                avgRainfall = avgRainfall / rainfall.Count;
-                
+                throw floatDivisorZero;
             }
-            catch (DivideByZeroException ex)
-            {
-                Console.WriteLine("Try Cath - Error DBZ : " + ex.Message);
-            }
-            catch(ArgumentNullException ex)
-            {
-                Console.WriteLine("Try Cath - Error : " + ex.Message);
-            }
-         
-         }
+            avgRainfall = avgRainfall / rainfall.Count;
+        }
 
         static void CalcRainFallGrade()
         {
-            if (avgRainfall >= 100 )
+            if (avgRainfall >= 100)
             {
                 gradeRainfall = "A";
             }
@@ -69,11 +72,11 @@ namespace ControlFlow
             {
                 gradeRainfall = "B";
             }
-            else if(avgRainfall >=75)
+            else if (avgRainfall >= 75)
             {
                 gradeRainfall = "C";
             }
-            else if (avgRainfall >= 60 && avgRainfall != 0 )
+            else if (avgRainfall >= 60 && avgRainfall != 0)
             {
                 gradeRainfall = "D";
             }
@@ -82,7 +85,7 @@ namespace ControlFlow
                 gradeRainfall = "E";
             }
 
-            
+
             switch (gradeRainfall)
             {
                 case "A":
@@ -104,6 +107,22 @@ namespace ControlFlow
 
         }
 
+        static void PrintRainFall()
+        {
+            bool endoflist = rainfall.Count > 0 ? true : false;
+
+            int i = 0;
+
+            while (endoflist)
+            {
+                Console.WriteLine(rainfall[i]);
+                i++;
+
+                endoflist = i == rainfall.Count ? false : true;
+
+            }
+        }
 
     }
 }
+
