@@ -8,22 +8,25 @@ namespace delegateEvent
 {
     class Program
     {
+
+        static event PrintDelegate printer;
+
         static void Main(string[] args)
         {
-           
-           PrintDelegate printer = new PrintDelegate(Print);
-           printer += Print2;
+
+            printer += Print;
+            printer += Print2;
 
             PrintDelegateEventArgs printArg = new PrintDelegateEventArgs();
             printArg.printString = "Hello World !!";
 
             printer("String", printArg);
-                                 
+
         }
 
-        static void Print(object sender,PrintDelegateEventArgs iarg)
+        static void Print(object sender, PrintDelegateEventArgs iarg)
         {
-                        Console.WriteLine($"Print requested for {iarg.printString}");
+            Console.WriteLine($"Print requested for {iarg.printString}");
         }
 
         static void Print2(object sender, PrintDelegateEventArgs iarg)

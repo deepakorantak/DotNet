@@ -6,6 +6,5 @@ using System.Threading.Tasks;
 
 namespace delegateEvent
 {
-   public delegate void PrintDelegate(object sender, PrintDelegateEventArgs args);
-  
+   public delegate void PrintDelegate(object sender, PrintDelegateEventArgs args);  
 }
