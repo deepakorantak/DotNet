@@ -6,45 +6,16 @@ using System.Threading.Tasks;
 
 namespace InheritanceExample
 {
-    class bike : automobile
+    class Bike : Automobile
     {
-        public bike(string manf, string color,string iengine)
+        string _engine;
+
+        public Bike(string manf, string color,string iengine)
             : base(manf, color)
-        {
-            _performance = (int)Performance.Good;
-            engine = iengine;
-        }
-
-        static double stdMilage = 80;
-        string engine;
-        int _performance;
-
-        enum Performance
-        {
-            Excellent = 3,
-            Good = 2,
-            BelowAverage = 1
-
-        }
-
+        {           
+            _engine = iengine;
+            _stdMilage = 80;
+        }                      
        
-
-
-        public void RatePerformance()
-        {
-            if (Milage > stdMilage)
-            {
-                _performance = (int)Performance.Excellent;
-            }
-            else if (Milage == stdMilage)
-            {
-                _performance = (int)Performance.Good;
-            }
-            else
-            {
-                _performance = (int)Performance.BelowAverage;
-            }
-
-        }
     }
 }
