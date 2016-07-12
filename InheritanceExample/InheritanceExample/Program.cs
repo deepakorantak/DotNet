@@ -16,14 +16,14 @@ namespace InheritanceExample
 
             c1.CalcMilage();
             c1.RatePerformance();
-
+            
             c1.PrintInfo();
 
             Console.WriteLine( "***************************" );
 
             Automobile b2 = new Bike("Honda", "Blue", "2-stroke");
             b2._Consumption = 110;
-            b2._Running = 2300;
+            b2._Running = 9000;
 
             b2.CalcMilage();
             b2.RatePerformance();
