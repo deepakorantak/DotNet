@@ -10,16 +10,27 @@ namespace InheritanceExample
     {
         static void Main(string[] args)
         {
-            Car c1 = new Car("Hyundai", "Red", "manual");
+            Automobile c1 = new Car("Hyundai", "Red", "manual");
             c1._Consumption = 100;
             c1._Running = 2100;
 
             c1.CalcMilage();
             c1.RatePerformance();
 
-            Console.WriteLine($"Milage of Car - {c1._Milage}");
-            Console.WriteLine($"Performance rating of the Car - {c1._performance}");
+            c1.PrintInfo();
 
-        }
+            Console.WriteLine( "***************************" );
+
+            Automobile b2 = new Bike("Honda", "Blue", "2-stroke");
+            b2._Consumption = 110;
+            b2._Running = 2300;
+
+            b2.CalcMilage();
+            b2.RatePerformance();
+
+            b2.PrintInfo();          
+                
+                
+         }
     }
 }

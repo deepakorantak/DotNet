@@ -17,9 +17,13 @@ namespace InheritanceExample
             _stdMilage = 13.25;
         }
 
-        
-                     
- 
+        public override void PrintInfo()
+        {
+            base.PrintInfo();
+            Console.WriteLine($"Transmission : {_transmission}");
+        }
+
+
     }
 }
 

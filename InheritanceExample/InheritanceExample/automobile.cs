@@ -16,7 +16,7 @@ namespace InheritanceExample
         public int _performance;
 
         protected static double _stdMilage;
-       
+
         enum Performance
         {
             Excellent = 1,
@@ -56,6 +56,16 @@ namespace InheritanceExample
                 _performance = (int)Performance.BelowAverage;
             }
 
+        }
+
+        public virtual void PrintInfo()
+        {
+            Console.WriteLine($"Manufacturer : {_manufacturer}");
+            Console.WriteLine($"Color : {_color}");
+            Console.WriteLine($"Running in Km : {_Running}");
+            Console.WriteLine($"Consupmtion in Litre : {_Consumption}");
+            Console.WriteLine($"Milage in km/ltr : {_Milage}");
+            Console.WriteLine($"Performance rating : {_performance}");
         }
         
     }

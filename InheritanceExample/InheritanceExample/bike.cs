@@ -17,5 +17,11 @@ namespace InheritanceExample
             _stdMilage = 80;
         }                      
        
+        public void PrintInfo()
+        {
+
+            Console.WriteLine($"Engine : {_engine}");
+        }
+
     }
 }
