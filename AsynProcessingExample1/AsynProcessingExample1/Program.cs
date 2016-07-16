@@ -41,7 +41,7 @@ namespace ThreadExample
             {
                 for (int idx = 0; idx < threadCollection.Count; idx ++)
                 {
-                    //Console.WriteLine($"Thread: {threadCollection[idx].ManagedThreadId} is alive : {threadCollection[idx].ThreadState}"); 
+                  
                     if (threadCollection[idx].ThreadState != System.Threading.ThreadState.Stopped)
                         goto check_1;
                     else
