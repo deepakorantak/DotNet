@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AsynProcessingExample1")]
+[assembly: AssemblyTitle("ThreadExample")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CTS")]
-[assembly: AssemblyProduct("AsynProcessingExample1")]
+[assembly: AssemblyProduct("ThreadExample")]
 [assembly: AssemblyCopyright("Copyright © CTS 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

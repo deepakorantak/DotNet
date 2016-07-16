@@ -7,8 +7,8 @@
     <ProjectGuid>{DEE85B70-51A9-4E56-94E1-0640EC7C8635}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AsynProcessingExample1</RootNamespace>
-    <AssemblyName>AsynProcessingExample1</AssemblyName>
+    <RootNamespace>ThreadExample</RootNamespace>
+    <AssemblyName>ThreadExample</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
