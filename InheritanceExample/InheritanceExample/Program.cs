@@ -28,7 +28,7 @@ namespace InheritanceExample
             b2.CalcMilage();
             b2.RatePerformance();
 
-            b2.PrintInfo();          
+            b2.PrintInfo();         
                 
                 
          }

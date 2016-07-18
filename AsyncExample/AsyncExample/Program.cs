@@ -12,24 +12,32 @@ namespace AsyncExample
     {
         static void Main(string[] args)
         {
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
             TaskProcessing();
-            Console.WriteLine($"Task processing completed on thread : {Thread.CurrentThread.ManagedThreadId}" );
+            Console.WriteLine($"Task processing completed on thread : {Thread.CurrentThread.ManagedThreadId}");
+            Console.ReadLine();
         }
 
         static void TaskProcessing()
         {
+            WebClient _cl = new WebClient();
+              _cl.DownloadStringCompleted += DisplayMsg;
+
+   
             String[] urls =
             {
-                "https://msdn.microsoft.com/en-us/default.aspx",
-               // "https://www.UiPath.com",
-                "https://www.nseindia.com/"
+                "http://msdn.microsoft.com/en-us/default.aspx",
+                "http://www.Microsoft.com",
+                "https://www.UiPath.com"
+
             };
 
             foreach (var url in urls)
             {
                 DownloadSite(url);
             }
-            
+
         }
 
         static void DownloadSite(string url)
@@ -39,7 +47,7 @@ namespace AsyncExample
             try
             {
                 _cl.DownloadStringAsync(new Uri(url),url);
-
+            
             }
             catch (ArgumentNullException)
             {
@@ -48,24 +56,26 @@ namespace AsyncExample
             }
             catch (WebException)
             {
-
-                throw;
-            }
-            catch (Exception)
-            {
-
                 throw;
             }
 
 
         }
 
-        static void DisplayMsg(object sender,DownloadStringCompletedEventArgs e)
+        static void DisplayMsg(object sender, DownloadStringCompletedEventArgs e)
         {
-            Console.WriteLine("Inside DisplayMsg");
-            var res = e.Result;
-            string task = e.UserState as string;
-            Console.WriteLine($"Task {task} run on thread : {Thread.CurrentThread.ManagedThreadId} returned bytes : {res}");
+            try
+            {
+                Console.WriteLine("Inside DisplayMsg");
+                var res = e.Result;
+                string task = e.UserState as string;
+                Console.WriteLine($"Task {task} run on thread : {Thread.CurrentThread.ManagedThreadId} returned bytes : {res.Length}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
     }
 }

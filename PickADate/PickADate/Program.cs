@@ -10,8 +10,8 @@ namespace PickADate
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Today??");
-            Console.ReadLine();
+            Console.WriteLine("Enter a date?");
+            DateTime date = Date Console.ReadLine();
         }
     }
 }

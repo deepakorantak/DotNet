@@ -41,18 +41,7 @@ namespace Enrollment.Test
             
         }
 
-        [TestMethod]
-        public void TestValueTypes()
-        {
-            int x1 = 2;
-            int x2 = x1;
-            Assert.AreEqual(x1,x2);
-
-            x1 = 5;
-
-            Assert.AreNotEqual(x1, x2);
-        }
-
+        
         [TestMethod]
         public void TestPassReferenceTypes()
         {
@@ -71,19 +60,5 @@ namespace Enrollment.Test
             x.name.Add("Name changed");
         }
 
-        [TestMethod]
-        public void TestPassValueTypes()
-        {
-            int x1 = 4;
-            int x2 = x1;
-
-            AssignValue(x1);
-            Assert.AreEqual(x1, x2);
-        }
-        //assigning
-        public void AssignValue(int x)
-        {
-            x = 10;
-        }
-    }
+            }
 }
