@@ -24,7 +24,11 @@ namespace GenericQueue
                 Console.WriteLine(_q.Name); 
             }
 
-            Console.WriteLine($"Dqueue the queue : {pq.Dequeue().Name}");
+            while (pq.Count !=0 )
+            {
+                Console.WriteLine($"Dqueue the queue : {pq.Dequeue().Name}");
+            }
+           
 
         }
     }
