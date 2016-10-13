@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
 using System.IO;
+using System.Activities.Presentation.Metadata;
 
 namespace MSVisionAPI
 {
-    public class VisionAPIFunctions
+    public class VisionAPIFunctions : IRegisterMetadata
     {
 
         public static async Task<OcrResults> UploadAndRecognizeImage(string imageFilePath, string language,string SubscriptionKey)
@@ -70,9 +71,11 @@ namespace MSVisionAPI
             return stringBuilder.ToString();
         }
 
+        public void Register()
+        {
 
-
-
+        }
+        
 
     }
 }
