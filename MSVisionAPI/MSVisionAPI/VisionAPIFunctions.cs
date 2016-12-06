@@ -25,8 +25,11 @@ namespace MSVisionAPI
             {
                
                 Console.WriteLine("Calling VisionServiceClient.RecognizeTextAsync()...");
-                OcrResults ocrResult = await VisionServiceClient.RecognizeTextAsync(imageFileStream, language);
-                LogOcrResults(ocrResult);
+                Console.WriteLine("Before Async call");
+                OcrResults ocrResult =  await VisionServiceClient.RecognizeTextAsync(imageFileStream, language);
+
+                Console.WriteLine("Done");
+               // LogOcrResults(ocrResult);
                 return ocrResult;
             }
 
