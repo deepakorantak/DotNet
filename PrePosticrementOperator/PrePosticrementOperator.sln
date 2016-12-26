@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrePosticrementOperator", "PrePosticrementOperator\PrePosticrementOperator.csproj", "{008D50F4-9950-4D60-9ACE-E7E5A2981E52}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{008D50F4-9950-4D60-9ACE-E7E5A2981E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{008D50F4-9950-4D60-9ACE-E7E5A2981E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{008D50F4-9950-4D60-9ACE-E7E5A2981E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{008D50F4-9950-4D60-9ACE-E7E5A2981E52}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
