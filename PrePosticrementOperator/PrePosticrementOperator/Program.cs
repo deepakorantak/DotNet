@@ -19,6 +19,7 @@ namespace PrePosticrementOperator
 
             res = ++i;
             Console.WriteLine($" Prefix ++ result : {res} and i : {i}  ");
-        }
+
+                    } 
     }
 }

@@ -20,7 +20,7 @@ namespace EventDelegateVariations
         {
             Console.WriteLine("In class ActionSTDelagate");
             opr(a, b);
-            OperationCompleted("Operation Completed !!");
+            OperationCompleted("Operation Completed !!");            
         }
 
     }

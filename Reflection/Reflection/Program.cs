@@ -45,7 +45,8 @@ namespace Reflection
             double area = (double)pinfo.GetValue(s1) ;
 
             Console.WriteLine($"Value of property _area is : {area}");
-            
+                    
+        
 
         }
     }
