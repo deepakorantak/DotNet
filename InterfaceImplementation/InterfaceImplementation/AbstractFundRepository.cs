@@ -18,16 +18,10 @@ namespace InterfaceImplementation
         {
             _queryResult = new List<QueryResult>();
 
-            var result = (from f in _listFund
-                          join c in _listCustomer on f._customerID equals c._customerID
-                          orderby c._customerName,f._fundName
-                          select new { CustName = c._customerName, FundNumber = f._fundNumber, FundName = f._fundName })
-                        ;
-
-            foreach (var item in result)
-            {
-                _queryResult.Add(new QueryResult(item.CustName, item.FundNumber, item.FundName));
-            }
+            _queryResult = (from f in _listFund
+                            join c in _listCustomer on f._customerID equals c._customerID
+                            orderby c._customerName, f._fundName
+                            select new QueryResult(icust: c._customerName, ifundNumber: f._fundNumber, ifund: f._fundName)).ToList<QueryResult>();
 
             return _queryResult;
         }
