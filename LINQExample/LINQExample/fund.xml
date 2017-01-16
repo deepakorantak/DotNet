@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FundHouses>
+  <FundHouse FundHouse="ICICI Prudential" Year="2016" />
+  <FundHouse FundHouse="HDFC" Year="2016" />
+  <FundHouse FundHouse="Birla SunLife" Year="2016" />
+  <FundHouse FundHouse="DSP Blackrock" Year="2016" />
+  <FundHouse FundHouse="Sundaram" Year="2016" />
+  <FundHouse FundHouse="Tata" Year="2016" />
+  <FundHouse FundHouse="SBI" Year="2016" />
+  <FundHouse FundHouse="Franklin Templeton" Year="2016" />
+  <FundHouse FundHouse="Reliance" Year="2016" />
+</FundHouses>
