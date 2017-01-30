@@ -19,15 +19,19 @@ namespace DelegateUsingLambdaFuncT
 
             MathOperation oper = new MathOperation();
 
-            x = 5.35;
-            y = 6.65;
+            Console.WriteLine("Enter First Number");
+            x = Convert.ToDouble(Console.ReadLine());
 
-                        Console.WriteLine("Enter Add - addition, Sub - Subtraction,Mul - Multiplication, Div - Division");
+            Console.WriteLine("Enter Second Number");
+            y = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("Enter Add - addition, Sub - Subtraction, Mul - Multiplication, Div - Division");
             string option = Console.ReadLine();
+
+            bool showResult = true;
 
             switch (option.ToUpper())
             {
-
                 case "ADD":
                     result = oper.MathProcess(x, y, Addition);
                     break;
@@ -41,10 +45,14 @@ namespace DelegateUsingLambdaFuncT
                     result = oper.MathProcess(x, y, Division);
                     break;
                 default:
+                    showResult = false;
+                    Console.WriteLine("Invalid option");
                     break;
             }
 
-            Console.WriteLine($"Result of operation {option.ToUpper()} {x},{y} is {result}");
+            if (showResult) // Show result only if user selects a valid option
+                Console.WriteLine($"Result of operation {option.ToUpper()} {x},{y} is {result}");
+            Console.ReadLine();
         }
     }
 }
