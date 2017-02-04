@@ -14,7 +14,8 @@ namespace FundDb2
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-    
+    using System.Collections.Generic;
+
     public partial class fundEntitiesConnectionString : DbContext
     {
         public fundEntitiesConnectionString()
@@ -38,6 +39,19 @@ namespace FundDb2
                 new ObjectParameter("param1", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FundDetails>("GetFunds", param1Parameter);
+        }
+
+        [DbFunction("FundModel2.Store", "ufnGetFundCount")]
+        public int GetFundCount(int custID)
+        {
+            var objectContext = ((IObjectContextAdapter)this).ObjectContext;
+
+            var parameters = new List<ObjectParameter>();
+            parameters.Add(new ObjectParameter("customerID", custID));
+           
+            return objectContext.CreateQuery<int>("FundModel2.Store.ufnGetFundCount(@customerID)", parameters.ToArray())
+                 .Execute(MergeOption.NoTracking)
+                 .FirstOrDefault();
         }
     }
 }

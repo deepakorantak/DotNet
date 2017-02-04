@@ -20,6 +20,9 @@ namespace LINQExample
 
         static void Main(string[] args)
         {
+            //Example of executing a scalar values function
+            ExecuteFunction();                      
+
             //Example of executing a procedure using EF - fetting funds of an customer
             ExecuteProcedure(2);
 
@@ -79,6 +82,19 @@ namespace LINQExample
 
             //Read a XML using Linq
             //ReadXMLToList();
+
+        }
+
+        private static void ExecuteFunction()
+        {
+
+            var customerList = context.Customers.Select(c => new { c.customerID, c.customerName});
+            foreach (var c in customerList)
+            {
+                int cnt = context.GetFundCount(c.customerID);
+                Console.WriteLine($"Fund count for Customer : {c.customerID} , {c.customerName} = {cnt}");
+            }
+           
 
         }
 

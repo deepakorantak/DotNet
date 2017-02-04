@@ -54,7 +54,9 @@ warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary ke
           <Parameter Name="customerID" Type="int" Mode="In" />
           <Parameter Name="fundName" Type="varchar" Mode="In" />
         </Function>
-        
+        <Function Name="ufnGetFundCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="customerID" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="fundModel2StoreContainer">
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fund" EntityType="Self.Fund" Schema="dbo" store:Type="Tables" />
