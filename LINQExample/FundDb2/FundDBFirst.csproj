@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5E4A392C-0694-4F03-AD45-2012BD3E3B05}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{5D2B2655-59F7-4C7A-A8FC-D2A5C63E59F5}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LINQExample</RootNamespace>
-    <AssemblyName>LINQExample</AssemblyName>
+    <RootNamespace>FundDb2</RootNamespace>
+    <AssemblyName>FundDb2</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,32 +51,62 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FundName.cs" />
-    <Compile Include="FundHouse.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Customer.cs">
+      <DependentUpon>FundModel2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fund.cs">
+      <DependentUpon>FundModel2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FundDetails.cs">
+      <DependentUpon>FundModel2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FundModel2.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FundModel2.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FundModel2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FundModel2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FundModel2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FundModel2.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShoppingCart.cs" />
+    <Compile Include="ViewCustomer.cs">
+      <DependentUpon>FundModel2.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Fund.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="FundHouse.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EntityDeploy Include="FundModel2.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>FundModel2.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="FundModel2.edmx.diagram">
+      <DependentUpon>FundModel2.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fund.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="FundModel2.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FundModel2.edmx</DependentUpon>
+      <LastGenOutput>FundModel2.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="FundModel2.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FundModel2.edmx</DependentUpon>
+      <LastGenOutput>FundModel2.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FundDb2\FundDBFirst.csproj">
-      <Project>{5d2b2655-59f7-4c7a-a8fc-d2a5c63e59f5}</Project>
-      <Name>FundDBFirst</Name>
-    </ProjectReference>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

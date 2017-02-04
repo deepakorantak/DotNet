@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using System.Data.Entity.Core.Objects;
+using FundDb2;
 
 namespace LINQExample
 {
@@ -10,11 +12,32 @@ namespace LINQExample
     {
 
         public static List<Product> prodList = ShoppingCart.GetshoppingCart();
-        public static List<Fund> fundList = FundFileReader.ProcessFunds("Fund.csv");
+        public static List<FundName> fundList = FundFileReader.ProcessFunds("Fund.csv");
         public static List<FundHouse> fundHouseList = FundHouseFileReader.ProcessFundHouses("FundHouse.csv");
+        public static fundEntitiesConnectionString context = new fundEntitiesConnectionString();
+
+      
 
         static void Main(string[] args)
         {
+            //Example of executing a procedure using EF - fetting funds of an customer
+            ExecuteProcedure(2);
+
+            //Example of executing a view using EF
+            ExecuteView();
+
+            //Add new fund to a customer
+            AddFund(2, 4, "HDFC - Equity Tax Saver");
+
+            //Update customer name
+            UpdateCustomerName(1, "ICICI - Prudential");
+
+            //Delete fund 
+            DeleteFund(4);
+
+            //Update customer name
+            UpdateCustomerName(1, "ICICI");
+
             //calling Extension method Filter without deferred execution
             //ExtensionMethod();
 
@@ -52,13 +75,124 @@ namespace LINQExample
             //LinqOperatorAggregate();
 
             //Convert to XMl using Linq
-            ConverListToXML();
+            //ConverListToXML();
 
             //Read a XML using Linq
-            ReadXMLToList();
+            //ReadXMLToList();
 
         }
 
+        private static void DeleteFund(int ifundID)
+        {
+
+            int icustomerID = context.Funds.Where(f => f.fundId == ifundID).Select(r => r.customerID).First();
+                
+            Console.WriteLine("Before deleting fund , the fund list");
+
+            //Get the list of Funds for given customer 
+            GetFunds(icustomerID);
+
+
+            var delFunds = context.Funds.Where(f => f.fundId == ifundID).ToList();
+            foreach (var del in delFunds)
+            {
+                Console.WriteLine($"Fund to Delete : {del.fundId} , {del.fundName}");
+                context.Funds.Remove(del);
+            }
+
+            context.SaveChanges();
+            
+            //Get the list of Funds for given customer 
+            GetFunds(icustomerID);
+        }
+
+        private static void UpdateCustomerName(int icustomerID , string icustomerName)
+        {
+            Console.WriteLine("Before updating the customer name, the fund list");
+
+            //Get the list of Funds for given customer 
+            GetFunds(icustomerID);
+
+            Console.WriteLine($"Updating the customer name for {icustomerID}...");
+            var customers = context.Customers.Where(m => m.customerID == icustomerID).First();
+            customers.customerName = icustomerName;
+
+
+            Console.WriteLine("After updating the customer name, the fund list");
+
+            //Get the list of Funds for given customer 
+            GetFunds(icustomerID);
+            
+            context.SaveChanges();
+        }
+
+        private static void ExecuteView()
+        {
+            Console.WriteLine("result of View  ....");
+            var resultView = context.ViewCustomers.ToList();
+            resultView.ForEach(r => Console.WriteLine($"Customer ID : {r.customerID} , Customer Name : {r.customerName} , Fund Count : {r.fundCnt}"));
+        }
+
+        private static void ExecuteProcedure(int icustomerID)
+        {
+            Console.WriteLine("result of GetFunds procedure ....");
+            var result = context.GetFunds(icustomerID).ToList();
+            result.ForEach(r => Console.WriteLine($"Customer ID : {r.customerID} , Customer Name : {r.customerName} , Fund Name : {r.fundName}"));
+        }
+
+        private static void AddFund(int icustomerID, int ifundID, string ifundName)
+        {
+
+            Console.WriteLine("Before adding a fund to a customer name, the fund list");
+
+            //Get the list of Funds for given customer 
+            GetFunds(icustomerID);
+
+            Console.WriteLine($"Adding a new fund for customer ID - {icustomerID} ... ");
+            Fund newFund = CreateFund(ifundID,ifundName,icustomerID);
+            context.Funds.Add(newFund);
+            
+            context.SaveChanges();
+            
+            Console.WriteLine("After adding a fund to a customer name, the fund list");
+
+           //Get the list of Funds for given customer 
+           GetFunds(icustomerID);
+        }
+
+        private static Fund CreateFund(int ifundID,string ifundName,int icustID)
+        {
+           
+            Fund newFund = new Fund
+            {
+                fundId = ifundID,
+                fundName = ifundName,
+                customerID = icustID
+                
+            };
+            return newFund;
+        }
+
+        private static void GetFunds(int icustomerID)
+        {
+            Console.WriteLine($"List of funds for customer ID - {icustomerID} ...");
+            Func<Fund, bool> w;
+            if (icustomerID == 0)
+            {
+                w = f => f.customerID == f.customerID;
+            }
+            else
+            {
+                w = f => f.customerID == icustomerID;
+            }
+            
+
+            var funds = context.Funds.Where(w).Select(r => new { r.Customer.customerID, r.Customer.customerName,r.fundId, r.fundName });
+            foreach (var fund in funds)
+            {
+                Console.WriteLine($"Customer ID : {fund.customerID} , Customer Name : {fund.customerName} , Fund ID : {fund.fundId} , Fund Name : {fund.fundName}");
+            }
+        }
 
         private static void ExtensionMethod()
         {

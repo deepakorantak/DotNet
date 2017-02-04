@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="fundModel2.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="customer_id" />
+          </Key>
+          <Property Name="customer_id" Type="int" Nullable="false" />
+          <Property Name="customer_name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Fund">
+          <Key>
+            <PropertyRef Name="fund_id" />
+          </Key>
+          <Property Name="fund_id" Type="int" Nullable="false" />
+          <Property Name="fund_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="customer_id" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vcustomerData">
+          <Key>
+            <PropertyRef Name="customer_id" />
+            
+          </Key>
+          <Property Name="customer_id" Type="int" Nullable="false" />
+          <Property Name="customer_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fund_count" Type="int" />
+        </EntityType>
+        <Association Name="FK_Fund_ToCustomer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Fund" Type="Self.Fund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="customer_id" />
+            </Principal>
+            <Dependent Role="Fund">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="DeleteFund" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fundID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetFunds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="param1" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InsertFund" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fundID" Type="int" Mode="In" />
+          <Parameter Name="customerID" Type="int" Mode="In" />
+          <Parameter Name="fundName" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="fundModel2StoreContainer">
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Fund" EntityType="Self.Fund" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vcustomerData" EntityType="Self.vcustomerData" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vcustomerData].[customer_id] AS [customer_id], 
+    [vcustomerData].[customer_name] AS [customer_name], 
+    [vcustomerData].[fund_count] AS [fund_count]
+    FROM [dbo].[vcustomerData] AS [vcustomerData]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Fund_ToCustomer" Association="Self.FK_Fund_ToCustomer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Fund" EntitySet="Fund" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="fundModel2" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Fund">
+          <Key>
+            <PropertyRef Name="fundId" />
+          </Key>
+          <Property Name="fundId" Type="Int32" Nullable="false" />
+          <Property Name="fundName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="customerID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="fundModel2.FK_Fund_ToCustomer" FromRole="Fund" ToRole="Customer" />
+        </EntityType>
+        <EntityContainer Name="fundEntitiesConnectionString" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Funds" EntityType="Self.Fund" />
+          <EntitySet Name="Customers" EntityType="fundModel2.Customer" />
+          <AssociationSet Name="FK_Fund_ToCustomer" Association="fundModel2.FK_Fund_ToCustomer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Fund" EntitySet="Funds" />
+          </AssociationSet>
+          <FunctionImport Name="GetFunds" ReturnType="Collection(fundModel2.FundDetails)">
+          <Parameter Name="param1" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="ViewCustomers" EntityType="fundModel2.ViewCustomer" />
+        </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="customerID" />
+          </Key>
+          <Property Name="customerID" Type="Int32" Nullable="false" />
+          <Property Name="customerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Funds" Relationship="fundModel2.FK_Fund_ToCustomer" FromRole="Customer" ToRole="Fund" />
+        </EntityType>
+        <Association Name="FK_Fund_ToCustomer">
+          <End Type="fundModel2.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="fundModel2.Fund" Role="Fund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="customerID" />
+            </Principal>
+            <Dependent Role="Fund">
+              <PropertyRef Name="customerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="FundDetails">
+          <Property Type="Int32" Name="customerID" Nullable="false" />
+          <Property Type="String" Name="customerName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fundName" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="ViewCustomer">
+          <Key>
+            <PropertyRef Name="customerID" />
+          </Key>
+          <Property Name="customerID" Type="Int32" Nullable="false" />
+          <Property Name="customerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fundCnt" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="fundModel2StoreContainer" CdmEntityContainer="fundEntitiesConnectionString">
+          <EntitySetMapping Name="Funds">
+            <EntityTypeMapping TypeName="fundModel2.Fund">
+              <MappingFragment StoreEntitySet="Fund">
+                <ScalarProperty Name="customerID" ColumnName="customer_id" />
+                <ScalarProperty Name="fundId" ColumnName="fund_id" />
+                <ScalarProperty Name="fundName" ColumnName="fund_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="fundModel2.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="customerName" ColumnName="customer_name" />
+                <ScalarProperty Name="customerID" ColumnName="customer_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetFunds" FunctionName="fundModel2.Store.GetFunds">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="fundModel2.FundDetails">
+                <ScalarProperty Name="customerID" ColumnName="customer_id" />
+                <ScalarProperty Name="customerName" ColumnName="customer_name" />
+                <ScalarProperty Name="fundName" ColumnName="fund_name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="ViewCustomers">
+            <EntityTypeMapping TypeName="fundModel2.ViewCustomer">
+              <MappingFragment StoreEntitySet="vcustomerData">
+                <ScalarProperty Name="fundCnt" ColumnName="fund_count" />
+                <ScalarProperty Name="customerName" ColumnName="customer_name" />
+                <ScalarProperty Name="customerID" ColumnName="customer_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
