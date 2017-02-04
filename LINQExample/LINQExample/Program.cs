@@ -20,7 +20,7 @@ namespace LINQExample
 
         static void Main(string[] args)
         {
-            //Example of executing a scalar values function
+            //Example of executing a scalar valued + table valued function
             ExecuteFunction();                      
 
             //Example of executing a procedure using EF - fetting funds of an customer
