@@ -94,7 +94,14 @@ namespace LINQExample
                 int cnt = context.GetFundCount(c.customerID);
                 Console.WriteLine($"Fund count for Customer : {c.customerID} , {c.customerName} = {cnt}");
             }
-           
+
+            //var fullList = context.GetFullDetails();
+
+            //foreach (var c in fullList)
+            //{
+            //    int cnt = context.GetFundCount(c.customerID);
+            //    Console.WriteLine($"Customer ID : {c.customerID} , Fund ID :  {c.fundID} , Customer Name : {c.customerName} , Fund Name : {c.fundName} , Number of funds : {c.fundCount}");
+            //}
 
         }
 

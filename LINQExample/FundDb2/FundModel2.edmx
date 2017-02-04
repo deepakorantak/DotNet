@@ -54,6 +54,19 @@ warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary ke
           <Parameter Name="customerID" Type="int" Mode="In" />
           <Parameter Name="fundName" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="ufnFullDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="custID" Type="int" Nullable="false" />
+                <Property Name="fundID" Type="int" Nullable="false" />
+                <Property Name="custName" Type="varchar" MaxLength="50" Nullable="false" />
+                <Property Name="fundName" Type="varchar" MaxLength="50" Nullable="false" />
+                <Property Name="fundCount" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <Function Name="ufnGetFundCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
           <Parameter Name="customerID" Type="int" Mode="In" />
         </Function>
@@ -130,6 +143,13 @@ warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary ke
           <Property Name="customerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="fundCnt" Type="Int32" />
         </EntityType>
+        <ComplexType Name="FullDetails" >
+          <Property Type="Int32" Name="customerID" Nullable="false" />
+          <Property Type="Int32" Name="fundID" Nullable="false" />
+          <Property Type="String" Name="customerName" Nullable="false" />
+          <Property Type="String" Name="fundName" Nullable="false" />
+          <Property Type="Int32" Name="fundCount" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

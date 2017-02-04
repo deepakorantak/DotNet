@@ -54,6 +54,9 @@
     <Compile Include="Customer.cs">
       <DependentUpon>FundModel2.tt</DependentUpon>
     </Compile>
+    <Compile Include="FullDetails.cs">
+      <DependentUpon>FundModel2.tt</DependentUpon>
+    </Compile>
     <Compile Include="Fund.cs">
       <DependentUpon>FundModel2.tt</DependentUpon>
     </Compile>
