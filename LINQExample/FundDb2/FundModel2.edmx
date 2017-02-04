@@ -165,6 +165,18 @@ warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary ke
                 <ScalarProperty Name="fundName" ColumnName="fund_name" />
               </MappingFragment>
             </EntityTypeMapping>
+            <EntityTypeMapping TypeName="fundModel2.Fund">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="fundModel2.Store.InsertFund">
+                  <ScalarProperty Name="fundId" ParameterName="fundID" />
+                  <ScalarProperty Name="fundName" ParameterName="fundName" />
+                  <ScalarProperty Name="customerID" ParameterName="customerID" />
+                </InsertFunction>
+                <DeleteFunction FunctionName="fundModel2.Store.DeleteFund" >
+                  <ScalarProperty Name="fundId" ParameterName="fundID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="fundModel2.Customer">

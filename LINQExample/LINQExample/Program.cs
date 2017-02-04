@@ -21,25 +21,25 @@ namespace LINQExample
         static void Main(string[] args)
         {
             //Example of executing a scalar valued + table valued function
-            ExecuteFunction();                      
+            //ExecuteFunction();                      
 
             //Example of executing a procedure using EF - fetting funds of an customer
-            ExecuteProcedure(2);
+            //ExecuteProcedure(2);
 
             //Example of executing a view using EF
-            ExecuteView();
+           // ExecuteView();
 
             //Add new fund to a customer
             AddFund(2, 4, "HDFC - Equity Tax Saver");
 
             //Update customer name
-            UpdateCustomerName(1, "ICICI - Prudential");
+            //UpdateCustomerName(1, "ICICI - Prudential");
 
             //Delete fund 
             DeleteFund(4);
 
             //Update customer name
-            UpdateCustomerName(1, "ICICI");
+            //UpdateCustomerName(1, "ICICI");
 
             //calling Extension method Filter without deferred execution
             //ExtensionMethod();
