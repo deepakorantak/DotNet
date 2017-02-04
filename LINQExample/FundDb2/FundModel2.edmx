@@ -58,9 +58,9 @@ warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary ke
           <ReturnType>
             <CollectionType>
               <RowType>
-                <Property Name="custID" Type="int" Nullable="false" />
+                <Property Name="customerID" Type="int" Nullable="false" />
                 <Property Name="fundID" Type="int" Nullable="false" />
-                <Property Name="custName" Type="varchar" MaxLength="50" Nullable="false" />
+                <Property Name="customerName" Type="varchar" MaxLength="50" Nullable="false" />
                 <Property Name="fundName" Type="varchar" MaxLength="50" Nullable="false" />
                 <Property Name="fundCount" Type="int" />
               </RowType>
@@ -109,6 +109,7 @@ warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary ke
           <Parameter Name="param1" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="ViewCustomers" EntityType="fundModel2.ViewCustomer" />
+          <FunctionImport Name="GetFullDetails" IsComposable="true" ReturnType="Collection(fundModel2.AllDetails)" />
         </EntityContainer>
         <EntityType Name="Customer">
           <Key>
@@ -143,7 +144,7 @@ warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary ke
           <Property Name="customerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="fundCnt" Type="Int32" />
         </EntityType>
-        <ComplexType Name="FullDetails" >
+        <ComplexType Name="AllDetails" >
           <Property Type="Int32" Name="customerID" Nullable="false" />
           <Property Type="Int32" Name="fundID" Nullable="false" />
           <Property Type="String" Name="customerName" Nullable="false" />
@@ -191,6 +192,17 @@ warning 6002: The table/view 'fund.dbo.vcustomerData' does not have a primary ke
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetFullDetails" FunctionName="fundModel2.Store.ufnFullDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="fundModel2.AllDetails">
+                <ScalarProperty Name="fundID" ColumnName="fundID" />
+                <ScalarProperty Name="fundName" ColumnName="fundName" />
+                <ScalarProperty Name="fundCount" ColumnName="fundCount" />
+                <ScalarProperty Name="customerID" ColumnName="customerID" />
+                <ScalarProperty Name="customerName" ColumnName="customerName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

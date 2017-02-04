@@ -40,6 +40,12 @@ namespace FundDb2
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FundDetails>("GetFunds", param1Parameter);
         }
+    
+        [DbFunction("fundEntitiesConnectionString", "GetFullDetails")]
+        public virtual IQueryable<AllDetails> GetFullDetails()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<AllDetails>("[fundEntitiesConnectionString].[GetFullDetails]()");
+        }
 
         [DbFunction("FundModel2.Store", "ufnGetFundCount")]
         public int GetFundCount(int custID)
@@ -52,17 +58,6 @@ namespace FundDb2
             return objectContext.CreateQuery<int>("FundModel2.Store.ufnGetFundCount(@customerID)", parameters.ToArray())
                  .Execute(MergeOption.NoTracking)
                  .FirstOrDefault();
-        }
-
-        [DbFunction("FundModel2.Store", "ufnFullDetails")]
-        public ObjectResult<FullDetails> GetFullDetails()
-        {
-            var objectContext = ((IObjectContextAdapter)this).ObjectContext;
-
-            var parameters = new List<ObjectParameter>();
-
-            return objectContext.ExecuteFunction<FullDetails>("FundModel2.Store.ufnFullDetails()", parameters.ToArray())
-                 ;
         }
 
     }

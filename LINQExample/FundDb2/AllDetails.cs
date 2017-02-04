@@ -11,7 +11,7 @@ namespace FundDb2
 {
     using System;
     
-    public partial class FullDetails
+    public partial class AllDetails
     {
         public int customerID { get; set; }
         public int fundID { get; set; }
