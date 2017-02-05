@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LINQExample
 {
-    class FundName
+    class MutualFund
     {
         public string fundCompany { get; set; }
         public string fundName { get; set; }
@@ -19,10 +19,10 @@ namespace LINQExample
 
     class FundFileReader
     {
-        public static List<FundName> ProcessFunds(string fileName)
+        public static List<MutualFund> ProcessFunds(string fileName)
         {
 
-            List<FundName> result = new List<FundName>();
+            List<MutualFund> result = new List<MutualFund>();
 
             result = File.ReadAllLines(fileName)
                          .Skip(1)
@@ -30,7 +30,7 @@ namespace LINQExample
                          .Select(r =>
                                          {
                                              var columns = r.Split(',');
-                                             return new FundName
+                                             return new MutualFund
                                              {
                                                  fundCompany = columns[0],
                                                  fundName = columns[1],
@@ -40,7 +40,7 @@ namespace LINQExample
                                                  year = int.Parse(columns[5])
                                              };
                                          }
-                                    ).ToList<FundName>();
+                                    ).ToList<MutualFund>();
             return result;
         }
     }
@@ -60,7 +60,7 @@ namespace LINQExample
             Min = double.MaxValue;
         }
 
-        public FundStatistics Accumulate(FundName f)
+        public FundStatistics Accumulate(MutualFund f)
         {
             Total += f.NAV;
             Count += 1;

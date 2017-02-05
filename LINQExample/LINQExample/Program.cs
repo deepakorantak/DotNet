@@ -12,7 +12,7 @@ namespace LINQExample
     {
 
         public static List<Product> prodList = ShoppingCart.GetshoppingCart();
-        public static List<FundName> fundList = FundFileReader.ProcessFunds("Fund.csv");
+        public static List<MutualFund> fundList = FundFileReader.ProcessFunds("Fund.csv");
         public static List<FundHouse> fundHouseList = FundHouseFileReader.ProcessFundHouses("FundHouse.csv");
         public static fundEntitiesConnectionString context = new fundEntitiesConnectionString();
 
