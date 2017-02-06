@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using System.Data.Entity.Core.Objects;
 using FundDb2;
+using ModelFirst;
 
 namespace LINQExample
 {
@@ -14,33 +15,129 @@ namespace LINQExample
         public static List<Product> prodList = ShoppingCart.GetshoppingCart();
         public static List<MutualFund> fundList = FundFileReader.ProcessFunds("Fund.csv");
         public static List<FundHouse> fundHouseList = FundHouseFileReader.ProcessFundHouses("FundHouse.csv");
-        public static fundEntitiesConnectionString context = new fundEntitiesConnectionString();
+        public static fundEntitiesConnectionString fundcontext = new fundEntitiesConnectionString();
+        public static ModelFirstContext orderContext = new ModelFirstContext();
 
       
 
         static void Main(string[] args)
         {
-            //Example of executing a scalar valued + table valued function
-            //ExecuteFunction();                      
+            ModelFirstMethods();
 
-            //Example of executing a procedure using EF - fetting funds of an customer
-            //ExecuteProcedure(2);
+            DBFirstModelMethods();
 
-            //Example of executing a view using EF
-           // ExecuteView();
+            InMemoryLinqMethods();
 
-            //Add new fund to a customer
-            AddFund(2, 4, "HDFC - Equity Tax Saver");
+        }
 
-            //Update customer name
-            //UpdateCustomerName(1, "ICICI - Prudential");
+        private static void ModelFirstMethods()
+        {
+            GetClients();
 
-            //Delete fund 
-            DeleteFund(4);
+            AddClientAddresses(1);
+                        
+            DeleteClientAddresses(1);
 
-            //Update customer name
-            //UpdateCustomerName(1, "ICICI");
+            //foreach (var s in custAddress)
+            //{
+            //    Console.WriteLine($"Details: {s.clientID} ,\n {s.clientName} , \n {s.Line1} , {s.Line2} , {s.City}, {s.State} , {s.ZipCode}");
+            //}   
 
+
+        }
+
+        private static void DeleteClientAddresses(int iclientID)
+        {
+            Console.WriteLine($"Before deleting Addresses for customer - {iclientID} ");
+            GetClientAddresses(iclientID);
+
+            List< ClientAddress > listAddresses = orderContext.ClientAddresses
+                                              .Where(c => c.clientID == iclientID)
+                                              .ToList();
+
+            orderContext.ClientAddresses.RemoveRange(listAddresses);
+            orderContext.SaveChanges();
+
+            Console.WriteLine($"After deleting Addresses for customer - {iclientID} ");
+            GetClientAddresses(iclientID);
+
+
+        }
+
+        private static void AddClientAddresses(int iclientID)
+        {
+            Console.WriteLine($"Before adding Addresses for customer - {iclientID} ");
+            GetClientAddresses(0);
+
+            Client clientDetails = orderContext.Clients.Where(c => c.clientID == iclientID).First();
+
+            List<ClientAddress> listAddress = new List<ClientAddress>();
+            listAddress.Add(new ClientAddress
+            {
+                clientID = iclientID,
+                Client = clientDetails,
+                addressType = EnumAddressType.Home,
+                Line1 = "Plot 24B Vrindavan Sector A and B",
+                City = "Pune",
+                State = "Maharashtra",
+                ZipCode = "411008"
+            });
+
+            listAddress.Add(new ClientAddress
+            {
+                clientID = iclientID,
+                Client = clientDetails,
+                addressType = EnumAddressType.Office,
+                Line1 = "Plot 24 Rajivgandhi IT park",
+                Line2 = "Hinjewadi Phase I",
+                City = "Pune",
+                State = "Maharashtra",
+                ZipCode = "411058"
+            });
+
+
+            orderContext.ClientAddresses.AddRange(listAddress);
+            orderContext.SaveChanges();
+
+            Console.WriteLine($"After adding Addresses for customer - {iclientID} ");
+            GetClientAddresses(iclientID);
+        }
+
+        private static void GetClientAddresses(int iclientID)
+        {
+            Func<ClientAddress, bool> w;
+            if (iclientID == 0)
+            {
+                w = f => f.clientID == f.clientID;
+            }
+            else
+            {
+                w = f => f.clientID == iclientID;
+            }
+
+            var orderList = orderContext.ClientAddresses.Where(w)
+                            .Select(s => new { s.clientID, s.Client.clientName, s.addressType, s.Line1, s.Line2, s.City, s.State, s.ZipCode });
+
+            foreach (var s in orderList)
+            {
+                Console.WriteLine($" Client Addresses - Details: \n {s.clientID} ,\n {s.clientName} ,\n {s.addressType}, \n {s.Line1} , {s.Line2} , {s.City}, {s.State} , {s.ZipCode}");
+            }
+                
+                
+        }
+
+        private static void GetClients()
+        {
+           
+
+            orderContext.Clients
+                             .Select(s => new { s.clientID, s.clientName})
+                             .ToList()
+                             .ForEach(s => Console.WriteLine($"Details: {s.clientID} ,\t {s.clientName}"));
+        }
+
+        private static void InMemoryLinqMethods()
+        {
             //calling Extension method Filter without deferred execution
             //ExtensionMethod();
 
@@ -82,20 +179,43 @@ namespace LINQExample
 
             //Read a XML using Linq
             //ReadXMLToList();
+        }
 
+        private static void DBFirstModelMethods()
+        {
+            //Example of executing a scalar valued + table valued function
+            //ExecuteFunction();                      
+
+            //Example of executing a procedure using EF - fetting funds of an customer
+            //ExecuteProcedure(2);
+
+            //Example of executing a view using EF
+            // ExecuteView();
+
+            //Add new fund to a customer
+            //AddFund(2, 4, "HDFC - Equity Tax Saver");
+
+            //Update customer name
+            //UpdateCustomerName(1, "ICICI - Prudential");
+
+            //Delete fund 
+            //DeleteFund(4);
+
+            //Update customer name
+            //UpdateCustomerName(1, "ICICI");
         }
 
         private static void ExecuteFunction()
         {
 
-            var customerList = context.Customers.Select(c => new { c.customerID, c.customerName });
+            var customerList = fundcontext.Customers.Select(c => new { c.customerID, c.customerName });
             foreach (var c in customerList)
             {
-                int cnt = context.GetFundCount(c.customerID);
+                int cnt = fundcontext.GetFundCount(c.customerID);
                 Console.WriteLine($"Fund count for Customer : {c.customerID} , {c.customerName} = {cnt}");
             }
 
-            var fullList = context.GetFullDetails();
+            var fullList = fundcontext.GetFullDetails();
 
             foreach (var c in fullList)
             {
@@ -108,7 +228,7 @@ namespace LINQExample
         private static void DeleteFund(int ifundID)
         {
 
-            int icustomerID = context.Funds.Where(f => f.fundId == ifundID).Select(r => r.customerID).First();
+            int icustomerID = fundcontext.Funds.Where(f => f.fundId == ifundID).Select(r => r.customerID).First();
                 
             Console.WriteLine("Before deleting fund , the fund list");
 
@@ -116,14 +236,14 @@ namespace LINQExample
             GetFunds(icustomerID);
 
 
-            var delFunds = context.Funds.Where(f => f.fundId == ifundID).ToList();
+            var delFunds = fundcontext.Funds.Where(f => f.fundId == ifundID).ToList();
             foreach (var del in delFunds)
             {
                 Console.WriteLine($"Fund to Delete : {del.fundId} , {del.fundName}");
-                context.Funds.Remove(del);
+                fundcontext.Funds.Remove(del);
             }
 
-            context.SaveChanges();
+            fundcontext.SaveChanges();
             
             //Get the list of Funds for given customer 
             GetFunds(icustomerID);
@@ -137,7 +257,7 @@ namespace LINQExample
             GetFunds(icustomerID);
 
             Console.WriteLine($"Updating the customer name for {icustomerID}...");
-            var customers = context.Customers.Where(m => m.customerID == icustomerID).First();
+            var customers = fundcontext.Customers.Where(m => m.customerID == icustomerID).First();
             customers.customerName = icustomerName;
 
 
@@ -146,20 +266,20 @@ namespace LINQExample
             //Get the list of Funds for given customer 
             GetFunds(icustomerID);
             
-            context.SaveChanges();
+            fundcontext.SaveChanges();
         }
 
         private static void ExecuteView()
         {
             Console.WriteLine("result of View  ....");
-            var resultView = context.ViewCustomers.ToList();
+            var resultView = fundcontext.ViewCustomers.ToList();
             resultView.ForEach(r => Console.WriteLine($"Customer ID : {r.customerID} , Customer Name : {r.customerName} , Fund Count : {r.fundCnt}"));
         }
 
         private static void ExecuteProcedure(int icustomerID)
         {
             Console.WriteLine("result of GetFunds procedure ....");
-            var result = context.GetFunds(icustomerID).ToList();
+            var result = fundcontext.GetFunds(icustomerID).ToList();
             result.ForEach(r => Console.WriteLine($"Customer ID : {r.customerID} , Customer Name : {r.customerName} , Fund Name : {r.fundName}"));
         }
 
@@ -173,9 +293,9 @@ namespace LINQExample
 
             Console.WriteLine($"Adding a new fund for customer ID - {icustomerID} ... ");
             Fund newFund = CreateFund(ifundID,ifundName,icustomerID);
-            context.Funds.Add(newFund);
+            fundcontext.Funds.Add(newFund);
             
-            context.SaveChanges();
+            fundcontext.SaveChanges();
             
             Console.WriteLine("After adding a fund to a customer name, the fund list");
 
@@ -210,7 +330,7 @@ namespace LINQExample
             }
             
 
-            var funds = context.Funds.Where(w).Select(r => new { r.Customer.customerID, r.Customer.customerName,r.fundId, r.fundName });
+            var funds = fundcontext.Funds.Where(w).Select(r => new { r.Customer.customerID, r.Customer.customerName,r.fundId, r.fundName });
             foreach (var fund in funds)
             {
                 Console.WriteLine($"Customer ID : {fund.customerID} , Customer Name : {fund.customerName} , Fund ID : {fund.fundId} , Fund Name : {fund.fundName}");

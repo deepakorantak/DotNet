@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ModelFirst.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelFirstStoreContainer">
+    <EntitySet Name="Clients" EntityType="ModelFirst.Store.Clients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Products" EntityType="ModelFirst.Store.Products" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Orders" EntityType="ModelFirst.Store.Orders" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ClientAddresses" EntityType="ModelFirst.Store.ClientAddresses" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderDetails" EntityType="ModelFirst.Store.OrderDetails" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ClientOrder" Association="ModelFirst.Store.ClientOrder">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="ClientClientAddress" Association="ModelFirst.Store.ClientClientAddress">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="ClientAddress" EntitySet="ClientAddresses" />
+    </AssociationSet>
+    <AssociationSet Name="ProductOrderDetails" Association="ModelFirst.Store.ProductOrderDetails">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="OrderOrderDetails" Association="ModelFirst.Store.OrderOrderDetails">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="ClientAddressOrder" Association="ModelFirst.Store.ClientAddressOrder">
+      <End Role="ClientAddress" EntitySet="ClientAddresses" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="clientID" />
+    </Key>
+    <Property Name="clientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="clientName" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="productName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="qty" Type="int" Nullable="false" />
+    <Property Name="price" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="orderID" />
+    </Key>
+    <Property Name="orderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="clientID" Type="int" Nullable="false" />
+    <Property Name="addresssID" Type="int" Nullable="false" />
+    <Property Name="orderDate" Type="datetime" Nullable="false" />
+    <Property Name="orderAmount" Type="float" Nullable="false" />
+    <Property Name="expDeliveryDate" Type="datetime" Nullable="true" />
+    <Property Name="actDeliveryDate" Type="datetime" Nullable="true" />
+    <Property Name="countOfItems" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ClientAddresses">
+    <Key>
+      <PropertyRef Name="addresssID" />
+    </Key>
+    <Property Name="addresssID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="clientID" Type="int" Nullable="false" />
+    <Property Name="addressType" Type="int" Nullable="false" />
+    <Property Name="Line1" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Line2" Type="nvarchar" Nullable="true" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="State" Type="nvarchar" Nullable="false" MaxLength="30" />
+    <Property Name="ZipCode" Type="nvarchar" Nullable="false" MaxLength="15" />
+  </EntityType>
+  <EntityType Name="OrderDetails">
+    <Key>
+      <PropertyRef Name="orderID" />
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="orderID" Type="int" Nullable="false" />
+    <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="productID" Type="int" Nullable="false" />
+    <Property Name="purchasedQty" Type="int" Nullable="false" />
+    <Property Name="purchasePrice" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="purchaseAmount" Type="float" Nullable="false" />
+  </EntityType>
+  <Association Name="ClientOrder">
+    <End Role="Client" Type="ModelFirst.Store.Clients" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Order" Type="ModelFirst.Store.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="clientID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="clientID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ClientClientAddress">
+    <End Role="Client" Type="ModelFirst.Store.Clients" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ClientAddress" Type="ModelFirst.Store.ClientAddresses" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="clientID" />
+      </Principal>
+      <Dependent Role="ClientAddress">
+        <PropertyRef Name="clientID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductOrderDetails">
+    <End Role="Product" Type="ModelFirst.Store.Products" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrderDetails" Type="ModelFirst.Store.OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrderOrderDetails">
+    <End Role="Order" Type="ModelFirst.Store.Orders" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrderDetails" Type="ModelFirst.Store.OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="orderID" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="orderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ClientAddressOrder">
+    <End Role="ClientAddress" Type="ModelFirst.Store.ClientAddresses" Multiplicity="1" />
+    <End Role="Order" Type="ModelFirst.Store.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ClientAddress">
+        <PropertyRef Name="addresssID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="addresssID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ModelFirst" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ModelFirstContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="ModelFirst.Client" />
+          <EntitySet Name="Products" EntityType="ModelFirst.Product" />
+          <EntitySet Name="Orders" EntityType="ModelFirst.Order" />
+          <EntitySet Name="ClientAddresses" EntityType="ModelFirst.ClientAddress" />
+          <AssociationSet Name="ClientOrder" Association="ModelFirst.ClientOrder">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="ClientClientAddress" Association="ModelFirst.ClientClientAddress">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="ClientAddress" EntitySet="ClientAddresses" />
+          </AssociationSet>
+          <EntitySet Name="OrderDetails" EntityType="ModelFirst.OrderDetails" />
+          <AssociationSet Name="ProductOrderDetails" Association="ModelFirst.ProductOrderDetails">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="OrderOrderDetails" Association="ModelFirst.OrderOrderDetails">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="ClientAddressOrder" Association="ModelFirst.ClientAddressOrder">
+            <End Role="ClientAddress" EntitySet="ClientAddresses" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="clientID" />
+          </Key>
+          <Property Name="clientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clientName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" />
+          <NavigationProperty Name="Orders" Relationship="ModelFirst.ClientOrder" FromRole="Client" ToRole="Order" />
+          <NavigationProperty Name="ClientAddresses" Relationship="ModelFirst.ClientClientAddress" FromRole="Client" ToRole="ClientAddress" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="productID" />
+          </Key>
+          <Property Name="productID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="productName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" />
+          <Property Name="qty" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <NavigationProperty Name="OrderDetails" Relationship="ModelFirst.ProductOrderDetails" FromRole="Product" ToRole="OrderDetails" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="orderID" />
+          </Key>
+          <Property Name="orderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clientID" Type="Int32" Nullable="false" />
+          <Property Name="addresssID" Type="Int32" Nullable="false" />
+          <Property Name="orderDate" Type="DateTime" Nullable="false" />
+          <Property Name="orderAmount" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="ModelFirst.ClientOrder" FromRole="Order" ToRole="Client" />
+          <Property Name="expDeliveryDate" Type="DateTime" Nullable="true" />
+          <Property Name="actDeliveryDate" Type="DateTime" Nullable="true" />
+          <Property Name="countOfItems" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderDetails" Relationship="ModelFirst.OrderOrderDetails" FromRole="Order" ToRole="OrderDetails" />
+          <NavigationProperty Name="ClientAddress" Relationship="ModelFirst.ClientAddressOrder" FromRole="Order" ToRole="ClientAddress" />
+        </EntityType>
+        <EntityType Name="ClientAddress">
+          <Key>
+            <PropertyRef Name="addresssID" />
+          </Key>
+          <Property Name="addresssID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clientID" Type="Int32" Nullable="false" />
+          <Property Name="addressType" Type="ModelFirst.EnumAddressType" Nullable="false" />
+          <Property Name="Line1" Type="String" Nullable="false" annotation:StoreGeneratedPattern="None" MaxLength="50" />
+          <Property Name="Line2" Type="String" Nullable="true" MaxLength="50" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="20" />
+          <Property Name="State" Type="String" Nullable="false" MaxLength="30" />
+          <Property Name="ZipCode" Type="String" Nullable="false" MaxLength="15" />
+          <NavigationProperty Name="Client" Relationship="ModelFirst.ClientClientAddress" FromRole="ClientAddress" ToRole="Client" />
+          <NavigationProperty Name="Orders" Relationship="ModelFirst.ClientAddressOrder" FromRole="ClientAddress" ToRole="Order" />
+        </EntityType>
+        <EnumType Name="EnumAddressType">
+          <Member Name="Home" Value="1" />
+          <Member Name="Office" Value="2" />
+        </EnumType>
+        <ComplexType Name="Address" >
+          <Property Type="String" Name="Line1" Nullable="false" />
+          <Property Type="String" Name="Line2" Nullable="true" />
+          <Property Type="String" Name="City" Nullable="false" />
+          <Property Type="String" Name="State" Nullable="false" />
+          <Property Type="String" Name="ZipCode" Nullable="false" />
+        </ComplexType>
+        <Association Name="ClientOrder">
+          <End Type="ModelFirst.Client" Role="Client" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ModelFirst.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="clientID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="clientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientClientAddress">
+          <End Type="ModelFirst.Client" Role="Client" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ModelFirst.ClientAddress" Role="ClientAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="clientID" />
+            </Principal>
+            <Dependent Role="ClientAddress">
+              <PropertyRef Name="clientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="orderID" />
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="orderID" Type="Int32" Nullable="false" />
+          <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="productID" Type="Int32" Nullable="false" />
+          <Property Name="purchasedQty" Type="Int32" Nullable="false" />
+          <Property Name="purchasePrice" Type="String" Nullable="false" />
+          <Property Name="purchaseAmount" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="ModelFirst.ProductOrderDetails" FromRole="OrderDetails" ToRole="Product" />
+          <NavigationProperty Name="Order" Relationship="ModelFirst.OrderOrderDetails" FromRole="OrderDetails" ToRole="Order" />
+        </EntityType>
+        <Association Name="ProductOrderDetails">
+          <End Type="ModelFirst.Product" Role="Product" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ModelFirst.OrderDetails" Role="OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="productID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="productID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrderOrderDetails">
+          <End Type="ModelFirst.Order" Role="Order" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ModelFirst.OrderDetails" Role="OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="orderID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="orderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientAddressOrder">
+          <End Type="ModelFirst.ClientAddress" Role="ClientAddress" Multiplicity="1" >
+          </End>
+          <End Type="ModelFirst.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientAddress">
+              <PropertyRef Name="addresssID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="addresssID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelFirstStoreContainer" CdmEntityContainer="ModelFirstContext">
+    <EntitySetMapping Name="Clients">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFirst.Client)">
+        <MappingFragment StoreEntitySet="Clients">
+          <ScalarProperty Name="clientID" ColumnName="clientID" />
+          <ScalarProperty Name="clientName" ColumnName="clientName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFirst.Product)">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="productID" ColumnName="productID" />
+          <ScalarProperty Name="productName" ColumnName="productName" />
+          <ScalarProperty Name="qty" ColumnName="qty" />
+          <ScalarProperty Name="price" ColumnName="price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFirst.Order)">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="orderID" ColumnName="orderID" />
+          <ScalarProperty Name="clientID" ColumnName="clientID" />
+          <ScalarProperty Name="addresssID" ColumnName="addresssID" />
+          <ScalarProperty Name="orderDate" ColumnName="orderDate" />
+          <ScalarProperty Name="orderAmount" ColumnName="orderAmount" />
+          <ScalarProperty Name="expDeliveryDate" ColumnName="expDeliveryDate" />
+          <ScalarProperty Name="actDeliveryDate" ColumnName="actDeliveryDate" />
+          <ScalarProperty Name="countOfItems" ColumnName="countOfItems" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClientAddresses">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFirst.ClientAddress)">
+        <MappingFragment StoreEntitySet="ClientAddresses">
+          <ScalarProperty Name="addresssID" ColumnName="addresssID" />
+          <ScalarProperty Name="clientID" ColumnName="clientID" />
+          <ScalarProperty Name="addressType" ColumnName="addressType" />
+          <ScalarProperty Name="Line1" ColumnName="Line1" />
+          <ScalarProperty Name="Line2" ColumnName="Line2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderDetails">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFirst.OrderDetails)">
+        <MappingFragment StoreEntitySet="OrderDetails">
+          <ScalarProperty Name="orderID" ColumnName="orderID" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="productID" ColumnName="productID" />
+          <ScalarProperty Name="purchasedQty" ColumnName="purchasedQty" />
+          <ScalarProperty Name="purchasePrice" ColumnName="purchasePrice" />
+          <ScalarProperty Name="purchaseAmount" ColumnName="purchaseAmount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
