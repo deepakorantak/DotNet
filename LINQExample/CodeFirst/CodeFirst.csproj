@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5E4A392C-0694-4F03-AD45-2012BD3E3B05}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{40304C27-F1B3-45AC-8456-68E3ABB25ADD}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LINQExample</RootNamespace>
-    <AssemblyName>LINQExample</AssemblyName>
+    <RootNamespace>CodeFirst</RootNamespace>
+    <AssemblyName>CodeFirst</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,40 +51,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MutualFund.cs" />
-    <Compile Include="FundHouse.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="CodeFirstContext.cs" />
+    <Compile Include="Flight.cs" />
+    <Compile Include="FlightCode.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Passenger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShoppingCart.cs" />
+    <Compile Include="Ticket.cs" />
+    <Compile Include="TicketDetail.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Fund.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="FundHouse.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fund.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CodeFirst\CodeFirst.csproj">
-      <Project>{40304c27-f1b3-45ac-8456-68e3abb25add}</Project>
-      <Name>CodeFirst</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FundDb2\FundDBFirst.csproj">
-      <Project>{5d2b2655-59f7-4c7a-a8fc-d2a5c63e59f5}</Project>
-      <Name>FundDBFirst</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ModelFirst\ModelFirst.csproj">
-      <Project>{14ecfc01-4ed7-46a9-923d-ea45d2db4d29}</Project>
-      <Name>ModelFirst</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

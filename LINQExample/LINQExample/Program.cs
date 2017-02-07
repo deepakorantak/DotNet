@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Data.Entity.Core.Objects;
 using FundDb2;
 using ModelFirst;
+using CodeFirst;
 
 namespace LINQExample
 {
@@ -17,11 +18,13 @@ namespace LINQExample
         public static List<FundHouse> fundHouseList = FundHouseFileReader.ProcessFundHouses("FundHouse.csv");
         public static fundEntitiesConnectionString fundcontext = new fundEntitiesConnectionString();
         public static ModelFirstContext orderContext = new ModelFirstContext();
+        public static CodeFirstContext bookingContext = new CodeFirstContext();
 
-      
 
         static void Main(string[] args)
         {
+            CodeFirstMethods();
+
             ModelFirstMethods();
 
             DBFirstModelMethods();
@@ -30,18 +33,18 @@ namespace LINQExample
 
         }
 
+        private static void CodeFirstMethods()
+        {
+            bookingContext.Flights.ToList().ForEach(s => Console.WriteLine($"Flight Details - {s.flightID} , {s.FlightCode}"));
+        }
+
         private static void ModelFirstMethods()
         {
-            GetClients();
+            //GetClients();
 
-            AddClientAddresses(1);
-                        
-            DeleteClientAddresses(1);
+            //AddClientAddresses(1);
 
-            //foreach (var s in custAddress)
-            //{
-            //    Console.WriteLine($"Details: {s.clientID} ,\n {s.clientName} , \n {s.Line1} , {s.Line2} , {s.City}, {s.State} , {s.ZipCode}");
-            //}   
+            //DeleteClientAddresses(1);
 
 
         }
@@ -51,7 +54,7 @@ namespace LINQExample
             Console.WriteLine($"Before deleting Addresses for customer - {iclientID} ");
             GetClientAddresses(iclientID);
 
-            List< ClientAddress > listAddresses = orderContext.ClientAddresses
+            List<ClientAddress> listAddresses = orderContext.ClientAddresses
                                               .Where(c => c.clientID == iclientID)
                                               .ToList();
 
@@ -122,16 +125,16 @@ namespace LINQExample
             {
                 Console.WriteLine($" Client Addresses - Details: \n {s.clientID} ,\n {s.clientName} ,\n {s.addressType}, \n {s.Line1} , {s.Line2} , {s.City}, {s.State} , {s.ZipCode}");
             }
-                
-                
+
+
         }
 
         private static void GetClients()
         {
-           
+
 
             orderContext.Clients
-                             .Select(s => new { s.clientID, s.clientName})
+                             .Select(s => new { s.clientID, s.clientName })
                              .ToList()
                              .ForEach(s => Console.WriteLine($"Details: {s.clientID} ,\t {s.clientName}"));
         }
@@ -219,7 +222,7 @@ namespace LINQExample
 
             foreach (var c in fullList)
             {
-                
+
                 Console.WriteLine($"Customer ID : {c.customerID} , Fund ID :  {c.fundID} , Customer Name : {c.customerName} , Fund Name : {c.fundName} , Number of funds : {c.fundCount}");
             }
 
@@ -229,7 +232,7 @@ namespace LINQExample
         {
 
             int icustomerID = fundcontext.Funds.Where(f => f.fundId == ifundID).Select(r => r.customerID).First();
-                
+
             Console.WriteLine("Before deleting fund , the fund list");
 
             //Get the list of Funds for given customer 
@@ -244,12 +247,12 @@ namespace LINQExample
             }
 
             fundcontext.SaveChanges();
-            
+
             //Get the list of Funds for given customer 
             GetFunds(icustomerID);
         }
 
-        private static void UpdateCustomerName(int icustomerID , string icustomerName)
+        private static void UpdateCustomerName(int icustomerID, string icustomerName)
         {
             Console.WriteLine("Before updating the customer name, the fund list");
 
@@ -265,7 +268,7 @@ namespace LINQExample
 
             //Get the list of Funds for given customer 
             GetFunds(icustomerID);
-            
+
             fundcontext.SaveChanges();
         }
 
@@ -292,26 +295,26 @@ namespace LINQExample
             GetFunds(icustomerID);
 
             Console.WriteLine($"Adding a new fund for customer ID - {icustomerID} ... ");
-            Fund newFund = CreateFund(ifundID,ifundName,icustomerID);
+            Fund newFund = CreateFund(ifundID, ifundName, icustomerID);
             fundcontext.Funds.Add(newFund);
-            
+
             fundcontext.SaveChanges();
-            
+
             Console.WriteLine("After adding a fund to a customer name, the fund list");
 
-           //Get the list of Funds for given customer 
-           GetFunds(icustomerID);
+            //Get the list of Funds for given customer 
+            GetFunds(icustomerID);
         }
 
-        private static Fund CreateFund(int ifundID,string ifundName,int icustID)
+        private static Fund CreateFund(int ifundID, string ifundName, int icustID)
         {
-           
+
             Fund newFund = new Fund
             {
                 fundId = ifundID,
                 fundName = ifundName,
                 customerID = icustID
-                
+
             };
             return newFund;
         }
@@ -328,9 +331,9 @@ namespace LINQExample
             {
                 w = f => f.customerID == icustomerID;
             }
-            
 
-            var funds = fundcontext.Funds.Where(w).Select(r => new { r.Customer.customerID, r.Customer.customerName,r.fundId, r.fundName });
+
+            var funds = fundcontext.Funds.Where(w).Select(r => new { r.Customer.customerID, r.Customer.customerName, r.fundId, r.fundName });
             foreach (var fund in funds)
             {
                 Console.WriteLine($"Customer ID : {fund.customerID} , Customer Name : {fund.customerName} , Fund ID : {fund.fundId} , Fund Name : {fund.fundName}");
@@ -545,15 +548,15 @@ namespace LINQExample
             var expResult1 = fundHouseList.Join(fundList,
                                                 h => h.fundCompany,
                                                 f => f.fundCompany,
-                                                (h, f) => new { h.year, h.fundCompany, f.fundCategory, f.fundName ,f.NAV}
+                                                (h, f) => new { h.year, h.fundCompany, f.fundCategory, f.fundName, f.NAV }
                                                )
                                            .GroupBy(a => a.fundCategory)
-                                           .OrderBy(r=>r.Key);
+                                           .OrderBy(r => r.Key);
 
             expResult1.ToList().ForEach(i =>
             {
                 Console.WriteLine($" Fund Category : { i.Key} ");
-                i.OrderByDescending(r=>r.NAV).ToList().ForEach(j => Console.WriteLine($"\t {j.fundName} , {j.NAV} "));
+                i.OrderByDescending(r => r.NAV).ToList().ForEach(j => Console.WriteLine($"\t {j.fundName} , {j.NAV} "));
             });
 
 
@@ -567,13 +570,13 @@ namespace LINQExample
             var expResult = fundHouseList.Join(fundList,
                                                 h => h.fundCompany,
                                                 f => f.fundCompany,
-                                                (h,f) => new { h.year, h.fundCompany,f.fundCategory,f.fundName}
+                                                (h, f) => new { h.year, h.fundCompany, f.fundCategory, f.fundName }
                                                )
-                                         .GroupBy(a=> a.fundCategory)
-                                         .SelectMany(g=>g)
+                                         .GroupBy(a => a.fundCategory)
+                                         .SelectMany(g => g)
                                          ;
 
-            expResult.OrderBy(r=>r.fundName).ToList().ForEach(r => Console.WriteLine(r.fundName));
+            expResult.OrderBy(r => r.fundName).ToList().ForEach(r => Console.WriteLine(r.fundName));
 
         }
 
@@ -582,17 +585,18 @@ namespace LINQExample
             Console.WriteLine("\n");
             Console.WriteLine("Aggregation Min Max and Avg operator result (Expression) ......");
 
-            var expResult = fundList.GroupBy(f=>f.fundCompany) 
-                                    .Select(g => {
-                                                    var stats = g.Aggregate(new FundStatistics(), (acc, f) => acc.Accumulate(f), acc => acc.Compute());
-                                                    return new
-                                                    {
-                                                        g.Key,
-                                                        stats.Max,
-                                                        stats.Min,
-                                                        stats.Avg
-                                                    };
-                                                }
+            var expResult = fundList.GroupBy(f => f.fundCompany)
+                                    .Select(g =>
+                                    {
+                                        var stats = g.Aggregate(new FundStatistics(), (acc, f) => acc.Accumulate(f), acc => acc.Compute());
+                                        return new
+                                        {
+                                            g.Key,
+                                            stats.Max,
+                                            stats.Min,
+                                            stats.Avg
+                                        };
+                                    }
                                             )
                                      .OrderByDescending(g => g.Max);
 
@@ -609,14 +613,15 @@ namespace LINQExample
             Console.WriteLine("\n");
             Console.WriteLine("Another Example Aggregation Min Max and Avg operator result (Expression) ......");
 
-            var expResult1 = fundList.GroupBy(f=>f.fundCategory)
-                                     .Select(g=> {
+            var expResult1 = fundList.GroupBy(f => f.fundCategory)
+                                     .Select(g =>
+                                     {
 
-                                                    var stats = g.ToList().Aggregate(new FundStatistics(), (acc, f) => acc.Accumulate(f), acc => acc.Compute());
-                                                     return new { g.Key, Min = stats.Min, Max = stats.Max, Avg = stats.Avg };
+                                         var stats = g.ToList().Aggregate(new FundStatistics(), (acc, f) => acc.Accumulate(f), acc => acc.Compute());
+                                         return new { g.Key, Min = stats.Min, Max = stats.Max, Avg = stats.Avg };
 
-                                                 })
-                                      .OrderByDescending(r=>r.Max);
+                                     })
+                                      .OrderByDescending(r => r.Max);
 
             expResult1.ToList().ForEach(
                                         i =>
@@ -634,7 +639,7 @@ namespace LINQExample
                             new
                             {
                                 Key = grpResult.Key,
-                                Min = grpResult.Min(f=>f.NAV),
+                                Min = grpResult.Min(f => f.NAV),
                                 Max = grpResult.Max(f => f.NAV),
                                 Avg = grpResult.Average(f => f.NAV)
 
@@ -665,7 +670,7 @@ namespace LINQExample
 
             var fundhouses = new XElement("FundHouses", from rec in fundHouseList
                                                         select new XElement("FundHouse", new XAttribute("FundHouse", rec.fundCompany)
-                                                                                       , new XAttribute("Year", rec.year)                                                                       
+                                                                                       , new XAttribute("Year", rec.year)
                                                                  ));
             document.Add(funds);
             document.Save("fund.xml");
@@ -673,11 +678,6 @@ namespace LINQExample
             document = new XDocument();
             document.Add(fundhouses);
             document.Save("fundhouse.xml");
-
-
-
-
-
 
         }
 
@@ -691,10 +691,12 @@ namespace LINQExample
             var document = XDocument.Load("fund.xml");
             var list = from d in document.Descendants("Fund")
                        where (string)d.Attribute("FundCategory") == "Balanced"
-                       select new { _fundHouse = (string)d.Attribute("FundHouse"),
-                                    _fund = (string)d.Attribute("Fund"),
-                                    _nav = (double)d.Attribute("NAV"),
-                                    _aum = (double)d.Attribute("AUM")
+                       select new
+                       {
+                           _fundHouse = (string)d.Attribute("FundHouse"),
+                           _fund = (string)d.Attribute("Fund"),
+                           _nav = (double)d.Attribute("NAV"),
+                           _aum = (double)d.Attribute("AUM")
                        };
 
 
@@ -714,7 +716,7 @@ namespace LINQExample
 
 
             expResult.ToList().ForEach(r => { Console.WriteLine($"Fund - {r._fundHouse} , {r._fund} , {r._nav} , {r._aum}"); });
-            
+
         }
     }
 }

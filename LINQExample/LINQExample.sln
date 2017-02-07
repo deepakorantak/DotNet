@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FundDBFirst", "FundDb2\Fund
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelFirst", "ModelFirst\ModelFirst.csproj", "{14ECFC01-4ED7-46A9-923D-EA45D2DB4D29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeFirst", "CodeFirst\CodeFirst.csproj", "{40304C27-F1B3-45AC-8456-68E3ABB25ADD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{14ECFC01-4ED7-46A9-923D-EA45D2DB4D29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14ECFC01-4ED7-46A9-923D-EA45D2DB4D29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14ECFC01-4ED7-46A9-923D-EA45D2DB4D29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40304C27-F1B3-45AC-8456-68E3ABB25ADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40304C27-F1B3-45AC-8456-68E3ABB25ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40304C27-F1B3-45AC-8456-68E3ABB25ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40304C27-F1B3-45AC-8456-68E3ABB25ADD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
