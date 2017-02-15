@@ -61,13 +61,13 @@ namespace TestBot.Dialog
                 }
                 else
                 {
-                    await context.PostAsync("Sorry...This amenity is not available with us");
+                    await context.PostAsync("Sorry...This is not available with us");
                     context.Wait(MessageReceived);
                     return;
                 }
             }
 
-            await context.PostAsync("Sorry...This amenity is not available with us");
+            await context.PostAsync("Sorry...This is not available with us");
             context.Wait(MessageReceived);
             return;
         }
