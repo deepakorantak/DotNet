@@ -12,17 +12,17 @@ namespace TestBot
     //[BotAuthentication]
     public class MessagesController : ApiController
     {
-        //public async Task<String> Get()
-        //{
-        //    return await Task.Factory.StartNew(() => "hello");
-        //}
+        public async Task<string> Get()
+        {
+            return await Task.Factory.StartNew(() => "hello");
+        }
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type.ToLower() == ActivityTypes.Message)
+            if (activity.Type == ActivityTypes.Message)
             {
                 await Conversation.SendAsync(activity, () => { return Chain.From( () => new HotelDialogLUIS(RoomReservation.BuildForm)); });
             }
