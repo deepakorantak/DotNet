@@ -46,7 +46,7 @@
     <Compile Include="DBTables.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StructTriggerType.cs" />
+    <Compile Include="EnumTriggerType.cs" />
     <Compile Include="TriggerTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
