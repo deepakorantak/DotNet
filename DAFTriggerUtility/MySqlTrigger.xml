@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MySql>
+<RowBeforeInsert>
+  <TriggerCreateSyntax syntax=" CREATE TRIGGER {table}_RBI BEFORE INSERT ON {table} FOR EACH ROW " />
+  <TriggerBodySyntax syntax=" BEGIN  {body}  END; " />
+  <TriggerBodyCondition syntax="\\No trigger condition " />
+  <Historytable flag="No" syntax=" INSERT INTO {hist_table} ( {column_list} ) VALUES ( {value_list} ) ;  " />
+</RowBeforeInsert>
+<RowAfterInsert>
+  <TriggerCreateSyntax syntax=" CREATE TRIGGER {table}_RAI AFTER INSERT ON {table} FOR EACH ROW " />
+  <TriggerBodySyntax syntax=" BEGIN  {body}  END; " />
+  <TriggerBodyCondition syntax="\\No trigger condition " />
+  <Historytable flag="Yes" syntax="  INSERT INTO {hist_table} ( {column_list} ) VALUES ( {value_list} ) ;  "/>
+ </RowAfterInsert>
+</MySql>
