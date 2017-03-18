@@ -13,6 +13,7 @@ namespace DAFTriggerUtility
         {
 
             var test = GetDBTableDetails.Create();
+
             foreach (var item in test)
             {
                 foreach (var trig in item.ListTriggerType.Values)
@@ -23,7 +24,7 @@ namespace DAFTriggerUtility
                     var tricondition = "\n\t"+ trig.TriggerBodyCondition + "\n" ;
 
 
-                    if (trig.IsHistorytable == "Yes")
+                    if (trig.InsertHistorytable == "Yes")
                     {
                         var hist_column_list = item.HistoryColumnList.Aggregate((a,c) => string.Join(",\n\t",a,c));
                         //Console.WriteLine(hist_column_list);
