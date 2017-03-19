@@ -15,6 +15,7 @@ namespace DAFTriggerUtility
         public string TriggerBodyCondition { get; set; }
         public string HistoryTableInsert { get; set; }
         public string InsertHistorytable { get; set; }
+        public string HistoryTablequalifier { get; set; }
 
         public TriggerTemplate(EnumTriggerType iTriggerType)
         {
@@ -32,7 +33,7 @@ namespace DAFTriggerUtility
 
             string configOption = GetTriggerConfiguration(iTriggerType);
 
-            var doc = XDocument.Load("D:\\Deepa\\Training\\GitHub\\DotNet\\DAFTriggerUtility\\MySqlTrigger.xml");
+            var doc = XDocument.Load("D:\\Deepa\\Training\\GitHub\\DotNet\\DAFTriggerUtility\\Input\\MySqlTrigger.xml");
 
             var listOfConfiguration = doc.Descendants(configOption);
 
@@ -59,6 +60,12 @@ namespace DAFTriggerUtility
                                                  .First()
                                                  .Attribute("syntax")
                                                  ;
+
+            trigTemplate.HistoryTablequalifier = (string)listOfConfiguration.Descendants("Historytable")
+                                                 .First()
+                                                 .Attribute("qualifier")
+                                                 ;
+
             return trigTemplate;
 
         }

@@ -12,25 +12,24 @@ namespace DAFTriggerUtility
         public string TableName { get; set; }
         public string HistoryTableName { get; set; }
         public List<string> ColumnList { get; set; }
-        public List<string> HistoryColumnList { get; set; }
         public Dictionary<EnumTriggerType,TriggerTemplate> ListTriggerType { get; set; }
         public DBTable()
         {
             //the  defuault values to be configured
-            HistoryColumnList = new List<string>() ;
+            //HistoryColumnList = new List<string>() ;
             ColumnList = new List<string>() ;
             ListTriggerType = new Dictionary<EnumTriggerType,TriggerTemplate> ();
         }
     }
 
-    public static class GetDBTableDetails
+    public static class DBTableDetailList
     {
         
         public static List<DBTable> Create()
         {
             List<DBTable> listOfTable = new List<DBTable>();
 
-            listOfTable = File.ReadAllLines("D:\\Deepa\\Training\\GitHub\\DotNet\\DAFTriggerUtility\\TableList.csv")
+            listOfTable = File.ReadAllLines("D:\\Deepa\\Training\\GitHub\\DotNet\\DAFTriggerUtility\\Input\\TableList.csv")
                               .Skip(1)
                               .Select(a => ExtractTableDetails(a))
                               .ToList();
@@ -48,10 +47,6 @@ namespace DAFTriggerUtility
                 tabDetails.TableName = row[0];
                 tabDetails.HistoryTableName = row[1];
                 tabDetails.ColumnList = row[14].Split('|').ToList();
-                tabDetails.HistoryColumnList.Add("`history_id`");
-                tabDetails.HistoryColumnList.Add("`operation`");
-                tabDetails.HistoryColumnList.AddRange(tabDetails.ColumnList);
-
 
                 if (row[2] == "Y")
                 {

@@ -1,2 +1,0 @@
-table_name,history_table,RBI,RAI,RBU,RAU,RBD,RAD,SBI,SAI,SBU,SAU,SBD,SAD,colum_list
-tbm_state,tbm_state_history,Y,Y,N,N,N,N,N,N,N,N,N,N,`state_code`|`state_name`|`active_flag`|`modified_by`|`modified_dttm`|`version_no`

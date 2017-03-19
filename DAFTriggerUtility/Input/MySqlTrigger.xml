@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MySql>
+<RowAfterInsert>
+  <TriggerCreateSyntax syntax="CREATE TRIGGER {table}_RAI AFTER INSERT ON {table} FOR EACH ROW {n}" />
+  <TriggerBodySyntax syntax="BEGIN {n}{t} @operation = 'insert'; {n}{t} {body} {n}END; {n}" />
+  <TriggerBodyCondition syntax="{n}{t}\\No trigger condition {n}" />
+  <Historytable flag="Yes" qualifier ="NEW" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,{n}{t}{t}operation,{n}{t}{t}{column_list} ) VALUES (  NULL,{n}{t}{t}@operation,{n}{t}{t}{value_list} );{n}"/>
+ </RowAfterInsert>
+  <RowAfterUpdate>
+    <TriggerCreateSyntax syntax="CREATE TRIGGER {table}_RAU AFTER UPDATE ON {table} FOR EACH ROW {n}" />
+    <TriggerBodySyntax syntax="BEGIN {n}{t} @operation = 'update'; {n}{t} {body} {n}END; {n}"  />
+    <TriggerBodyCondition syntax="{n}{t}IF NEW.active_flag = 'D' THEN {n}{t}{t} @operation = 'softdelete' {n}{t}END IF;{n}" />
+    <Historytable flag="Yes" qualifier ="OLD" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,{n}{t}{t}operation,{n}{t}{t}{column_list} ) VALUES (  NULL,{n}{t}{t}@operation,{n}{t}{t}{value_list} );{n}" />
+  </RowAfterUpdate>
+  <RowAfterDelete>
+    <TriggerCreateSyntax syntax="CREATE TRIGGER {table}_RAD AFTER DELETE ON {table} FOR EACH ROW {n}" />
+    <TriggerBodySyntax syntax="BEGIN {n}{t} @operation = 'delete'; {n}{t} {body} {n}END; {n}" />
+    <TriggerBodyCondition syntax="{n}{t}\\No trigger condition {n}" />
+    <Historytable flag="Yes" qualifier ="OLD" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,{n}{t}{t}operation,{n}{t}{t}{column_list} ) VALUES (  NULL,{n}{t}{t}@operation,{n}{t}{t}{value_list} );{n}" />
+  </RowAfterDelete>
+</MySql>
