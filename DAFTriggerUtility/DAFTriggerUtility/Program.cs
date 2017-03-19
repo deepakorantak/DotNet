@@ -33,6 +33,8 @@ namespace DAFTriggerUtility
                     if (trig.InsertHistorytable == "Yes")
                     {
                         var trihistory = BuildHistTableClause(tab, trig);
+                        
+                        //Append the history insert to trigger condition
                         tricondition = tricondition + trihistory;
                     }
 
@@ -66,9 +68,7 @@ namespace DAFTriggerUtility
             //Replace the history table insert for actual history table, column list and value list
             var trihistory = trig.HistoryTableInsert.Replace("{hist_table}", tab.HistoryTableName);
             trihistory = trihistory.Replace("{column_list}", hist_column_list);
-            trihistory = trihistory.Replace("{value_list}", value_column_list);
-
-            //Append the history insert to trigger condition
+            trihistory = trihistory.Replace("{value_list}", value_column_list);           
            
             return trihistory;
         }
