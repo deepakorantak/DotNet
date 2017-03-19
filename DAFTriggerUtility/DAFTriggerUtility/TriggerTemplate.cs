@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Configuration;
 
 namespace DAFTriggerUtility
 {
@@ -33,7 +34,9 @@ namespace DAFTriggerUtility
 
             string configOption = GetTriggerConfiguration(iTriggerType);
 
-            var doc = XDocument.Load("D:\\Deepa\\Training\\GitHub\\DotNet\\DAFTriggerUtility\\Input\\MySqlTrigger.xml");
+            var trigTemplateFile = ConfigurationManager.AppSettings["TriggerTemplateXML"];    
+
+            var doc = XDocument.Load(trigTemplateFile);
 
             var listOfConfiguration = doc.Descendants(configOption);
 

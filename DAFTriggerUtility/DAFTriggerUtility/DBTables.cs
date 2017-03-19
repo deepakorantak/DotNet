@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,9 @@ namespace DAFTriggerUtility
         {
             List<DBTable> listOfTable = new List<DBTable>();
 
-            listOfTable = File.ReadAllLines("D:\\Deepa\\Training\\GitHub\\DotNet\\DAFTriggerUtility\\Input\\TableList.csv")
+            var dbTableFile = ConfigurationManager.AppSettings["DBTableFile"];
+
+            listOfTable = File.ReadAllLines(dbTableFile)
                               .Skip(1)
                               .Select(a => ExtractTableDetails(a))
                               .ToList();

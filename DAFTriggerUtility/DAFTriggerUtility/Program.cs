@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,9 @@ namespace DAFTriggerUtility
         {
             //Get list of tables for which trigger are to be generated
             var ListOfTables = DBTableDetailList.Create();
-          
+
+            var trigOutPutPath = ConfigurationManager.AppSettings["TriggerOutPutPath"];
+
             foreach (var tab in ListOfTables)
             {
                 var finalTriggersyntax = "";
@@ -45,7 +48,7 @@ namespace DAFTriggerUtility
                     //Console.WriteLine(finalTriggersyntax);
                 }
 
-                File.WriteAllText("D:\\Deepa\\Training\\GitHub\\DotNet\\DAFTriggerUtility\\Output\\trg_" + tab.TableName + ".sql", finalTriggersyntax);
+                File.WriteAllText(trigOutPutPath + "trg_" + tab.TableName + ".sql", finalTriggersyntax);
 
             }
         }
