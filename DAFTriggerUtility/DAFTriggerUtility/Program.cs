@@ -24,6 +24,9 @@ namespace DAFTriggerUtility
                 //for each table create syntax for triggers applicable
                 foreach (var trig in tab.ListTriggerType.Values)
                 {
+                    //Create trigger script directive
+                    var triScriptDirective = trig.TriggerScriptDirective;
+
                     // Create trigger syntax
                     var triCreate = trig.TriggerCreateSyntax.Replace("{table}", tab.TableName) ;
                   
@@ -42,7 +45,7 @@ namespace DAFTriggerUtility
                     var tribody = trig.TriggerBodySyntax.Replace("{body}", tricondition);
 
                     //Create the complete trigger syntax
-                    finalTriggersyntax += triCreate + tribody;
+                    finalTriggersyntax += triScriptDirective + triCreate + tribody;
 
                     //Finally replace placeholders for new line and tab in the trigger syntax
                     finalTriggersyntax = finalTriggersyntax.Replace("{t}", "\t");

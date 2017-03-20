@@ -11,6 +11,7 @@ namespace DAFTriggerUtility
     public class TriggerTemplate
     {
         public string TriggerCreateSyntax { get; set; }
+        public string TriggerScriptDirective { get; set; }
         public EnumTriggerType TriggerType { get; set; }      
         public string TriggerBodySyntax { get; set; }
         public string TriggerBodyCondition { get; set; }
@@ -38,7 +39,14 @@ namespace DAFTriggerUtility
 
             var doc = XDocument.Load(trigTemplateFile);
 
+            trigTemplate.TriggerScriptDirective = (string)doc.Descendants("TriggerScriptDirective")
+                                                          .Descendants("TriggerScript")
+                                                          .First()
+                                                          .Attribute("directive");
+
             var listOfConfiguration = doc.Descendants(configOption);
+
+         
 
             trigTemplate.TriggerCreateSyntax = (string)listOfConfiguration.Descendants("TriggerCreateSyntax")
                                                                           .First()

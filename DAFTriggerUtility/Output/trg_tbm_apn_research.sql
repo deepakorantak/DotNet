@@ -1,11 +1,36 @@
-CREATE TRIGGER tbm_apn_research_RAI AFTER INSERT ON tbm_apn_research FOR EACH ROW 
-BEGIN 
-	 @operation = 'insert'; 
-	 
-	\\No trigger condition 
+DELIMITER $$
 
-	INSERT INTO tbm_apn_research_history ( history_id,
-		operation,
+ Use `daf2` $$
+
+CREATE                             
+DEFINER=`daf2`@`%`                             
+TRIGGER `tbm_apn_research_RBI`                             
+BEFORE INSERT ON `tbm_apn_research`                             
+FOR EACH ROW
+BEGIN 
+	SET NEW.modified_dttm = NOW();                                   
+	SET NEW.version_no = 1;                                    
+	 
+	/*No trigger condition*/ 
+ 
+END$$ 
+DELIMITER $$
+
+ Use `daf2` $$
+
+CREATE                               
+DEFINER=`daf2`@`%`                               
+TRIGGER `tbm_apn_research_RAI`                               
+AFTER INSERT ON `tbm_apn_research`                               
+FOR EACH ROW
+BEGIN 
+	DECLARE operation_value VARCHAR(20);                                    
+	SELECT 'Insert' INTO operation_value;                                     
+	 
+	/*No trigger condition*/ 
+
+	INSERT INTO tbm_apn_research_history ( history_id,                                                     
+		operation,                                                     
 		apn_research_id,
 		fips_code,
 		muncipality_code,
@@ -88,8 +113,8 @@ BEGIN
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,
-		@operation,
+		version_no ) VALUES (  NULL,                                                     
+		operation_value,                                                     
 		NEW.apn_research_id,
 		NEW.fips_code,
 		NEW.muncipality_code,
@@ -174,17 +199,32 @@ BEGIN
 		NEW.modified_dttm,
 		NEW.version_no );
  
-END; 
-CREATE TRIGGER tbm_apn_research_RAU AFTER UPDATE ON tbm_apn_research FOR EACH ROW 
+END$$ 
+DELIMITER $$
+
+ Use `daf2` $$
+
+CREATE                               
+DEFINER=`daf2`@`%`                               
+TRIGGER `tbm_apn_research_RBU`                               
+BEFORE UPDATE ON `tbm_apn_research`                               
+FOR EACH ROW
 BEGIN 
-	 @operation = 'update'; 
-	 
-	IF NEW.active_flag = 'D' THEN 
-		 @operation = 'softdelete' 
+	DECLARE operation_value VARCHAR(20);                                     
+	SELECT 'Update' INTO operation_value;                                     
+	SET NEW.modified_dttm = NOW();                                      
+	SET NEW.version_no = NEW.version_no + 1;                                      
+	
+	IF OLD.version_no != NEW.version_no THEN                                  
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Version Mismatch' ;                                 
+	END IF;
+                                 
+	IF NEW.active_flag = 'D' THEN                                  
+		SELECT 'SoftDelete' INTO operation_value;                                  
 	END IF;
 
-	INSERT INTO tbm_apn_research_history ( history_id,
-		operation,
+	INSERT INTO tbm_apn_research_history ( history_id,                                                     
+		operation,                                                     
 		apn_research_id,
 		fips_code,
 		muncipality_code,
@@ -267,101 +307,110 @@ BEGIN
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,
-		@operation,
-		OLD.apn_research_id,
-		OLD.fips_code,
-		OLD.muncipality_code,
-		OLD.pcl_id,
-		OLD.pcl_id_type,
-		OLD.range_code_type,
-		OLD.township_code,
-		OLD.section_code,
-		OLD.qtr_section_code,
-		OLD.muncipality_name,
-		OLD.block_id,
-		OLD.block_suffix_code,
-		OLD.lot_id,
-		OLD.lot_suffix,
-		OLD.tract_number,
-		OLD.sub_tract_number,
-		OLD.county_legal_txt,
-		OLD.land_dim_acres_total,
-		OLD.land_dim_sqft_total,
-		OLD.gend_sub_key,
-		OLD.sd_sub_condo_number,
-		OLD.plat_book,
-		OLD.plat_page,
-		OLD.owner_name_1,
-		OLD.owner_name_2,
-		OLD.owner_address_prefix_1,
-		OLD.owner_hse_address_number_1,
-		OLD.owner_address_suffix_1,
-		OLD.owner_address_prefix_2,
-		OLD.owner_hse_address_number_2,
-		OLD.owner_address_suffix_2,
-		OLD.owner_address_direction_code,
-		OLD.owner_address_street_name,
-		OLD.owner_address_mode_code,
-		OLD.owner_address_quadrant_code,
-		OLD.owner_address_apt_code,
-		OLD.owner_address_std_city,
-		OLD.owner_address_std_state,
-		OLD.owner_address_std_zip5,
-		OLD.owner_address_std_zip4,
-		OLD.situs_pcl_sitetyp_indicator,
-		OLD.situs_preffix_code_1,
-		OLD.situs_addresss_hse_number_1,
-		OLD.situs_addr_suffix_code_1,
-		OLD.situs_preffix_code_2,
-		OLD.situs_addresss_hse_number_2,
-		OLD.situs_addr_suffix_code_2,
-		OLD.situs_address_direction_code,
-		OLD.situs_address_street_name,
-		OLD.situs_address_mode_code,
-		OLD.situs_address_quadrant_code,
-		OLD.situs_address_apt_code,
-		OLD.situs_address_std_city,
-		OLD.situs_address_std_state,
-		OLD.situs_address_std_zip5,
-		OLD.situs_address_std_zip4,
-		OLD.other_match_info,
-		OLD.account_number,
-		OLD.owner_first_name_1,
-		OLD.owner_last_name_1,
-		OLD.owner_mid_initial_1,
-		OLD.owner_suffix_1,
-		OLD.owner_first_name_2,
-		OLD.owner_last_name_2,
-		OLD.owner_mid_initial_2,
-		OLD.owner_suffix_2,
-		OLD.owner_first_name_3,
-		OLD.owner_last_name_3,
-		OLD.owner_mid_initial_3,
-		OLD.owner_suffix_3,
-		OLD.owner_first_name_4,
-		OLD.owner_last_name_4,
-		OLD.owner_mid_initial_4,
-		OLD.owner_suffix_4,
-		OLD.trans_situs_std_code,
-		OLD.trans_plat_map_book,
-		OLD.trans_plat_map_page,
-		OLD.trans_gend_sub_key,
-		OLD.trans_sd_sub_condo_number,
-		OLD.active_flag,
-		OLD.modified_by,
-		OLD.modified_dttm,
-		OLD.version_no );
+		version_no ) VALUES (  NULL,                                                     
+		operation_value,                                                     
+		NEW.apn_research_id,
+		NEW.fips_code,
+		NEW.muncipality_code,
+		NEW.pcl_id,
+		NEW.pcl_id_type,
+		NEW.range_code_type,
+		NEW.township_code,
+		NEW.section_code,
+		NEW.qtr_section_code,
+		NEW.muncipality_name,
+		NEW.block_id,
+		NEW.block_suffix_code,
+		NEW.lot_id,
+		NEW.lot_suffix,
+		NEW.tract_number,
+		NEW.sub_tract_number,
+		NEW.county_legal_txt,
+		NEW.land_dim_acres_total,
+		NEW.land_dim_sqft_total,
+		NEW.gend_sub_key,
+		NEW.sd_sub_condo_number,
+		NEW.plat_book,
+		NEW.plat_page,
+		NEW.owner_name_1,
+		NEW.owner_name_2,
+		NEW.owner_address_prefix_1,
+		NEW.owner_hse_address_number_1,
+		NEW.owner_address_suffix_1,
+		NEW.owner_address_prefix_2,
+		NEW.owner_hse_address_number_2,
+		NEW.owner_address_suffix_2,
+		NEW.owner_address_direction_code,
+		NEW.owner_address_street_name,
+		NEW.owner_address_mode_code,
+		NEW.owner_address_quadrant_code,
+		NEW.owner_address_apt_code,
+		NEW.owner_address_std_city,
+		NEW.owner_address_std_state,
+		NEW.owner_address_std_zip5,
+		NEW.owner_address_std_zip4,
+		NEW.situs_pcl_sitetyp_indicator,
+		NEW.situs_preffix_code_1,
+		NEW.situs_addresss_hse_number_1,
+		NEW.situs_addr_suffix_code_1,
+		NEW.situs_preffix_code_2,
+		NEW.situs_addresss_hse_number_2,
+		NEW.situs_addr_suffix_code_2,
+		NEW.situs_address_direction_code,
+		NEW.situs_address_street_name,
+		NEW.situs_address_mode_code,
+		NEW.situs_address_quadrant_code,
+		NEW.situs_address_apt_code,
+		NEW.situs_address_std_city,
+		NEW.situs_address_std_state,
+		NEW.situs_address_std_zip5,
+		NEW.situs_address_std_zip4,
+		NEW.other_match_info,
+		NEW.account_number,
+		NEW.owner_first_name_1,
+		NEW.owner_last_name_1,
+		NEW.owner_mid_initial_1,
+		NEW.owner_suffix_1,
+		NEW.owner_first_name_2,
+		NEW.owner_last_name_2,
+		NEW.owner_mid_initial_2,
+		NEW.owner_suffix_2,
+		NEW.owner_first_name_3,
+		NEW.owner_last_name_3,
+		NEW.owner_mid_initial_3,
+		NEW.owner_suffix_3,
+		NEW.owner_first_name_4,
+		NEW.owner_last_name_4,
+		NEW.owner_mid_initial_4,
+		NEW.owner_suffix_4,
+		NEW.trans_situs_std_code,
+		NEW.trans_plat_map_book,
+		NEW.trans_plat_map_page,
+		NEW.trans_gend_sub_key,
+		NEW.trans_sd_sub_condo_number,
+		NEW.active_flag,
+		NEW.modified_by,
+		NEW.modified_dttm,
+		NEW.version_no );
  
-END; 
-CREATE TRIGGER tbm_apn_research_RAD AFTER DELETE ON tbm_apn_research FOR EACH ROW 
-BEGIN 
-	 @operation = 'delete'; 
-	 
-	\\No trigger condition 
+END$$ 
+DELIMITER $$
 
-	INSERT INTO tbm_apn_research_history ( history_id,
-		operation,
+ Use `daf2` $$
+
+CREATE                                 
+DEFINER=`daf2`@`%`                                 
+TRIGGER `tbm_apn_research_RBD`                                 
+AFTER DELETE ON `tbm_apn_research`                                 
+FOR EACH ROW
+BEGIN 
+	DECLARE operation_value VARCHAR(20);                                        
+	SELECT 'Update' INTO operation_value;                                       
+	 
+	/*No trigger condition*/ 
+
+	INSERT INTO tbm_apn_research_history ( history_id,                                                       
+		operation,                                                       
 		apn_research_id,
 		fips_code,
 		muncipality_code,
@@ -444,8 +493,8 @@ BEGIN
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,
-		@operation,
+		version_no ) VALUES (  NULL,                                                       
+		operation_value,                                                       
 		OLD.apn_research_id,
 		OLD.fips_code,
 		OLD.muncipality_code,
@@ -530,4 +579,4 @@ BEGIN
 		OLD.modified_dttm,
 		OLD.version_no );
  
-END; 
+END$$ 

@@ -1,21 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <MySql>
+<TriggerScriptDirective>
+ <TriggerScript directive="DELIMITER $${n}{n} Use `daf2` $${n}{n}" /> 
+</TriggerScriptDirective>
+<RowBeforeInsert>
+  <TriggerCreateSyntax syntax="CREATE
+                            {n}DEFINER=`daf2`@`%`
+                            {n}TRIGGER `{table}_RBI`
+                            {n}BEFORE INSERT ON `{table}`
+                            {n}FOR EACH ROW{n}" />
+  <TriggerBodySyntax syntax="BEGIN {n}{t}SET NEW.modified_dttm = NOW();
+                                  {n}{t}SET NEW.version_no = 1; 
+                                  {n}{t} {body} {n}END$$ {n}" />
+  <TriggerBodyCondition syntax="{n}{t}/*No trigger condition*/ {n}" />
+  <Historytable flag="No" qualifier ="NA" syntax=""/>
+</RowBeforeInsert>  
 <RowAfterInsert>
-  <TriggerCreateSyntax syntax="CREATE TRIGGER {table}_RAI AFTER INSERT ON {table} FOR EACH ROW {n}" />
-  <TriggerBodySyntax syntax="BEGIN {n}{t} @operation = 'insert'; {n}{t} {body} {n}END; {n}" />
-  <TriggerBodyCondition syntax="{n}{t}\\No trigger condition {n}" />
-  <Historytable flag="Yes" qualifier ="NEW" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,{n}{t}{t}operation,{n}{t}{t}{column_list} ) VALUES (  NULL,{n}{t}{t}@operation,{n}{t}{t}{value_list} );{n}"/>
- </RowAfterInsert>
-  <RowAfterUpdate>
-    <TriggerCreateSyntax syntax="CREATE TRIGGER {table}_RAU AFTER UPDATE ON {table} FOR EACH ROW {n}" />
-    <TriggerBodySyntax syntax="BEGIN {n}{t} @operation = 'update'; {n}{t} {body} {n}END; {n}"  />
-    <TriggerBodyCondition syntax="{n}{t}IF NEW.active_flag = 'D' THEN {n}{t}{t} @operation = 'softdelete' {n}{t}END IF;{n}" />
-    <Historytable flag="Yes" qualifier ="OLD" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,{n}{t}{t}operation,{n}{t}{t}{column_list} ) VALUES (  NULL,{n}{t}{t}@operation,{n}{t}{t}{value_list} );{n}" />
-  </RowAfterUpdate>
-  <RowAfterDelete>
-    <TriggerCreateSyntax syntax="CREATE TRIGGER {table}_RAD AFTER DELETE ON {table} FOR EACH ROW {n}" />
-    <TriggerBodySyntax syntax="BEGIN {n}{t} @operation = 'delete'; {n}{t} {body} {n}END; {n}" />
-    <TriggerBodyCondition syntax="{n}{t}\\No trigger condition {n}" />
-    <Historytable flag="Yes" qualifier ="OLD" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,{n}{t}{t}operation,{n}{t}{t}{column_list} ) VALUES (  NULL,{n}{t}{t}@operation,{n}{t}{t}{value_list} );{n}" />
-  </RowAfterDelete>
+  <TriggerCreateSyntax syntax="CREATE
+                              {n}DEFINER=`daf2`@`%`
+                              {n}TRIGGER `{table}_RAI`
+                              {n}AFTER INSERT ON `{table}`
+                              {n}FOR EACH ROW{n}" />
+  <TriggerBodySyntax syntax="BEGIN {n}{t}DECLARE operation_value VARCHAR(20);
+                                   {n}{t}SELECT 'Insert' INTO operation_value; 
+                                   {n}{t} {body} {n}END$$ {n}" />
+  <TriggerBodyCondition syntax="{n}{t}/*No trigger condition*/ {n}" />
+  <Historytable flag="Yes" qualifier ="NEW" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,
+                                                    {n}{t}{t}operation,
+                                                    {n}{t}{t}{column_list} ) VALUES (  NULL,
+                                                    {n}{t}{t}operation_value,
+                                                    {n}{t}{t}{value_list} );{n}"/>
+</RowAfterInsert>
+<RowBeforeUpdate>
+  <TriggerCreateSyntax syntax="CREATE
+                              {n}DEFINER=`daf2`@`%`
+                              {n}TRIGGER `{table}_RBU`
+                              {n}BEFORE UPDATE ON `{table}`
+                              {n}FOR EACH ROW{n}" />
+  <TriggerBodySyntax syntax="BEGIN {n}{t}DECLARE operation_value VARCHAR(20);
+                                    {n}{t}SELECT 'Update' INTO operation_value;
+                                    {n}{t}SET NEW.modified_dttm = NOW(); 
+                                    {n}{t}SET NEW.version_no = NEW.version_no + 1; 
+                                    {n}{t}{body} {n}END$$ {n}"   />
+  <TriggerBodyCondition syntax="{n}{t}IF OLD.version_no != NEW.version_no THEN 
+                                {n}{t}{t}SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Version Mismatch' ;
+                                {n}{t}END IF;{n}
+                                {n}{t}IF NEW.active_flag = 'D' THEN 
+                                {n}{t}{t}SELECT 'SoftDelete' INTO operation_value; 
+                                {n}{t}END IF;{n}" />
+  <Historytable flag="Yes" qualifier ="NEW" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,
+                                                    {n}{t}{t}operation,
+                                                    {n}{t}{t}{column_list} ) VALUES (  NULL,
+                                                    {n}{t}{t}operation_value,
+                                                    {n}{t}{t}{value_list} );{n}" />
+</RowBeforeUpdate>
+<RowBeforeDelete>
+    <TriggerCreateSyntax syntax="CREATE
+                                {n}DEFINER=`daf2`@`%`
+                                {n}TRIGGER `{table}_RBD`
+                                {n}AFTER DELETE ON `{table}`
+                                {n}FOR EACH ROW{n}"/>
+    <TriggerBodySyntax syntax="BEGIN {n}{t}DECLARE operation_value VARCHAR(20);  
+                                     {n}{t}SELECT 'Delete' INTO operation_value; 
+                                     {n}{t} {body} {n}END$$ {n}" />
+    <TriggerBodyCondition syntax="{n}{t}/*No trigger condition*/ {n}" />
+    <Historytable flag="Yes" qualifier ="OLD" syntax="{n}{t}INSERT INTO {hist_table} ( history_id,
+                                                      {n}{t}{t}operation,
+                                                      {n}{t}{t}{column_list} ) VALUES (  NULL,
+                                                      {n}{t}{t}operation_value,
+                                                      {n}{t}{t}{value_list} );{n}" />
+</RowBeforeDelete>
 </MySql>
