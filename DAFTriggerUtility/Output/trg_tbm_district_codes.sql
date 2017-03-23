@@ -2,10 +2,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAI` $$                               
+DROP TRIGGER IF EXISTS `tbm_district_codes_RAI` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAI`                               
-AFTER INSERT ON `tbm_county`                               
+TRIGGER `tbm_district_codes_RAI`                               
+AFTER INSERT ON `tbm_district_codes`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                    
@@ -13,25 +13,21 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbm_district_codes_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
+		district_id,
 		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		district_code,
 		active_flag,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
+		NEW.district_id,
 		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.district_code,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
@@ -42,10 +38,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbm_district_codes_RAU` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAU`                               
-AFTER UPDATE ON `tbm_county`                               
+TRIGGER `tbm_district_codes_RAU`                               
+AFTER UPDATE ON `tbm_district_codes`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                      
@@ -55,25 +51,21 @@ BEGIN
 		SELECT 'SoftDelete' INTO operation_value;                                    
 	END IF;
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbm_district_codes_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
+		district_id,
 		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		district_code,
 		active_flag,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
+		NEW.district_id,
 		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.district_code,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
@@ -84,10 +76,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RBD` $$                                 
+DROP TRIGGER IF EXISTS `tbm_district_codes_RBD` $$                                 
 CREATE                                 
-TRIGGER `tbm_county_RBD`                                 
-BEFORE DELETE ON `tbm_county`                                 
+TRIGGER `tbm_district_codes_RBD`                                 
+BEFORE DELETE ON `tbm_district_codes`                                 
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                        
@@ -95,25 +87,21 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbm_district_codes_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
+		district_id,
 		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		district_code,
 		active_flag,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
+		OLD.district_id,
 		OLD.fips_code,
-		OLD.state_code,
-		OLD.county_code,
-		OLD.county_name,
-		OLD.remi_code,
+		OLD.district_code,
 		OLD.active_flag,
 		OLD.modified_by,
 		OLD.modified_dttm,

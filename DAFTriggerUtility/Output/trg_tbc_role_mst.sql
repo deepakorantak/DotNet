@@ -2,10 +2,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAI` $$                               
+DROP TRIGGER IF EXISTS `tbc_role_mst_RAI` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAI`                               
-AFTER INSERT ON `tbm_county`                               
+TRIGGER `tbc_role_mst_RAI`                               
+AFTER INSERT ON `tbc_role_mst`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                    
@@ -13,26 +13,22 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_role_mst_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		role_cd,
 		active_flag,
+		comment_txt,
+		role_desc_txt,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.role_cd,
 		NEW.active_flag,
+		NEW.comment_txt,
+		NEW.role_desc_txt,
 		NEW.modified_by,
 		NEW.modified_dttm,
 		NEW.version_no );
@@ -42,10 +38,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbc_role_mst_RAU` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAU`                               
-AFTER UPDATE ON `tbm_county`                               
+TRIGGER `tbc_role_mst_RAU`                               
+AFTER UPDATE ON `tbc_role_mst`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                      
@@ -55,26 +51,22 @@ BEGIN
 		SELECT 'SoftDelete' INTO operation_value;                                    
 	END IF;
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_role_mst_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		role_cd,
 		active_flag,
+		comment_txt,
+		role_desc_txt,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.role_cd,
 		NEW.active_flag,
+		NEW.comment_txt,
+		NEW.role_desc_txt,
 		NEW.modified_by,
 		NEW.modified_dttm,
 		NEW.version_no );
@@ -84,10 +76,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RBD` $$                                 
+DROP TRIGGER IF EXISTS `tbc_role_mst_RBD` $$                                 
 CREATE                                 
-TRIGGER `tbm_county_RBD`                                 
-BEFORE DELETE ON `tbm_county`                                 
+TRIGGER `tbc_role_mst_RBD`                                 
+BEFORE DELETE ON `tbc_role_mst`                                 
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                        
@@ -95,26 +87,22 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_role_mst_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		role_cd,
 		active_flag,
+		comment_txt,
+		role_desc_txt,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		OLD.fips_code,
-		OLD.state_code,
-		OLD.county_code,
-		OLD.county_name,
-		OLD.remi_code,
+		OLD.role_cd,
 		OLD.active_flag,
+		OLD.comment_txt,
+		OLD.role_desc_txt,
 		OLD.modified_by,
 		OLD.modified_dttm,
 		OLD.version_no );

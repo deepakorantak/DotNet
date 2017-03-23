@@ -2,10 +2,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAI` $$                               
+DROP TRIGGER IF EXISTS `tbc_user_calendar_RAI` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAI`                               
-AFTER INSERT ON `tbm_county`                               
+TRIGGER `tbc_user_calendar_RAI`                               
+AFTER INSERT ON `tbc_user_calendar`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                    
@@ -13,39 +13,37 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_user_calendar_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		calendar_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		available_no,
+		calendar_date,
+		user_cd ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.calendar_id,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
-		NEW.version_no );
+		NEW.version_no,
+		NEW.available_no,
+		NEW.calendar_date,
+		NEW.user_cd );
  
 END$$ 
 DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbc_user_calendar_RAU` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAU`                               
-AFTER UPDATE ON `tbm_county`                               
+TRIGGER `tbc_user_calendar_RAU`                               
+AFTER UPDATE ON `tbc_user_calendar`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                      
@@ -55,39 +53,37 @@ BEGIN
 		SELECT 'SoftDelete' INTO operation_value;                                    
 	END IF;
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_user_calendar_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		calendar_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		available_no,
+		calendar_date,
+		user_cd ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.calendar_id,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
-		NEW.version_no );
+		NEW.version_no,
+		NEW.available_no,
+		NEW.calendar_date,
+		NEW.user_cd );
  
 END$$ 
 DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RBD` $$                                 
+DROP TRIGGER IF EXISTS `tbc_user_calendar_RBD` $$                                 
 CREATE                                 
-TRIGGER `tbm_county_RBD`                                 
-BEFORE DELETE ON `tbm_county`                                 
+TRIGGER `tbc_user_calendar_RBD`                                 
+BEFORE DELETE ON `tbc_user_calendar`                                 
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                        
@@ -95,28 +91,26 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_user_calendar_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		calendar_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		available_no,
+		calendar_date,
+		user_cd ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		OLD.fips_code,
-		OLD.state_code,
-		OLD.county_code,
-		OLD.county_name,
-		OLD.remi_code,
+		OLD.calendar_id,
 		OLD.active_flag,
 		OLD.modified_by,
 		OLD.modified_dttm,
-		OLD.version_no );
+		OLD.version_no,
+		OLD.available_no,
+		OLD.calendar_date,
+		OLD.user_cd );
  
 END$$ 

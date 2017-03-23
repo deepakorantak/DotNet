@@ -2,10 +2,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAI` $$                               
+DROP TRIGGER IF EXISTS `tbc_content_RAI` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAI`                               
-AFTER INSERT ON `tbm_county`                               
+TRIGGER `tbc_content_RAI`                               
+AFTER INSERT ON `tbc_content`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                    
@@ -13,39 +13,43 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_content_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		content_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		content,
+		content_cd,
+		content_type,
+		effective_end_dttm,
+		effective_start_dttm,
+		submitted_content ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.content_id,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
-		NEW.version_no );
+		NEW.version_no,
+		NEW.content,
+		NEW.content_cd,
+		NEW.content_type,
+		NEW.effective_end_dttm,
+		NEW.effective_start_dttm,
+		NEW.submitted_content );
  
 END$$ 
 DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbc_content_RAU` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAU`                               
-AFTER UPDATE ON `tbm_county`                               
+TRIGGER `tbc_content_RAU`                               
+AFTER UPDATE ON `tbc_content`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                      
@@ -55,39 +59,43 @@ BEGIN
 		SELECT 'SoftDelete' INTO operation_value;                                    
 	END IF;
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_content_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		content_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		content,
+		content_cd,
+		content_type,
+		effective_end_dttm,
+		effective_start_dttm,
+		submitted_content ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.content_id,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
-		NEW.version_no );
+		NEW.version_no,
+		NEW.content,
+		NEW.content_cd,
+		NEW.content_type,
+		NEW.effective_end_dttm,
+		NEW.effective_start_dttm,
+		NEW.submitted_content );
  
 END$$ 
 DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RBD` $$                                 
+DROP TRIGGER IF EXISTS `tbc_content_RBD` $$                                 
 CREATE                                 
-TRIGGER `tbm_county_RBD`                                 
-BEFORE DELETE ON `tbm_county`                                 
+TRIGGER `tbc_content_RBD`                                 
+BEFORE DELETE ON `tbc_content`                                 
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                        
@@ -95,28 +103,32 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_content_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		content_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		content,
+		content_cd,
+		content_type,
+		effective_end_dttm,
+		effective_start_dttm,
+		submitted_content ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		OLD.fips_code,
-		OLD.state_code,
-		OLD.county_code,
-		OLD.county_name,
-		OLD.remi_code,
+		OLD.content_id,
 		OLD.active_flag,
 		OLD.modified_by,
 		OLD.modified_dttm,
-		OLD.version_no );
+		OLD.version_no,
+		OLD.content,
+		OLD.content_cd,
+		OLD.content_type,
+		OLD.effective_end_dttm,
+		OLD.effective_start_dttm,
+		OLD.submitted_content );
  
 END$$ 

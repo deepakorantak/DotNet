@@ -2,6 +2,22 @@ DELIMITER $$
 
  Use `daf2` $$
 
+DROP TRIGGER IF EXISTS `tbm_county_RBI` $$                             
+CREATE                             
+TRIGGER `tbm_county_RBI`                             
+BEFORE INSERT ON `tbm_county`                             
+FOR EACH ROW
+BEGIN 
+	SET NEW.modified_dttm = NOW();                                   
+	SET NEW.version_no = 1;                                    
+	 
+	/*No trigger condition*/ 
+ 
+END$$ 
+DELIMITER $$
+
+ Use `daf2` $$
+
 DROP TRIGGER IF EXISTS `tbm_county_RAI` $$                               
 CREATE                               
 TRIGGER `tbm_county_RAI`                               
@@ -13,9 +29,8 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
-		operation,                                                       
-		system_dttm,                                                       
+	INSERT INTO tbm_county_history ( history_id,                                                     
+		operation,                                                     
 		fips_code,
 		state_code,
 		county_code,
@@ -24,9 +39,8 @@ BEGIN
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
-		operation_value,                                                       
-		NOW(),                                                       
+		version_no ) VALUES (  NULL,                                                     
+		operation_value,                                                     
 		NEW.fips_code,
 		NEW.state_code,
 		NEW.county_code,
@@ -42,22 +56,27 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbm_county_RBU` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAU`                               
-AFTER UPDATE ON `tbm_county`                               
+TRIGGER `tbm_county_RBU`                               
+BEFORE UPDATE ON `tbm_county`                               
 FOR EACH ROW
 BEGIN 
-	DECLARE operation_value VARCHAR(20);                                      
-	SELECT 'Update' INTO operation_value;                                                                                                            
+	DECLARE operation_value VARCHAR(20);                                     
+	SELECT 'Update' INTO operation_value;                                     
+	SET NEW.modified_dttm = NOW();                                                                          
 	
-	IF NEW.active_flag = 'D' THEN                                    
-		SELECT 'SoftDelete' INTO operation_value;                                    
+	IF OLD.version_no != NEW.version_no THEN                                  
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Version Mismatch' ;                                 
+	END IF;
+                                 
+	SET NEW.version_no = NEW.version_no + 1;                                  
+	IF NEW.active_flag = 'D' THEN                                  
+		SELECT 'SoftDelete' INTO operation_value;                                  
 	END IF;
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
-		operation,                                                       
-		system_dttm,                                                       
+	INSERT INTO tbm_county_history ( history_id,                                                     
+		operation,                                                     
 		fips_code,
 		state_code,
 		county_code,
@@ -66,9 +85,8 @@ BEGIN
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
-		operation_value,                                                       
-		NOW(),                                                       
+		version_no ) VALUES (  NULL,                                                     
+		operation_value,                                                     
 		NEW.fips_code,
 		NEW.state_code,
 		NEW.county_code,
@@ -97,7 +115,6 @@ BEGIN
 
 	INSERT INTO tbm_county_history ( history_id,                                                       
 		operation,                                                       
-		system_dttm,                                                       
 		fips_code,
 		state_code,
 		county_code,
@@ -108,7 +125,6 @@ BEGIN
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
-		NOW(),                                                       
 		OLD.fips_code,
 		OLD.state_code,
 		OLD.county_code,

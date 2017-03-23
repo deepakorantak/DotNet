@@ -30,6 +30,11 @@ namespace DAFTriggerUtility
         {
             List<DBTable> listOfTable = new List<DBTable>();
 
+            string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var folderPath = Directory.GetParent(path).Parent.Parent.Parent.FullName;
+            var dbTableFilePath = ConfigurationManager.AppSettings["DBTableFile"].ToString();
+
+
             var dbTableFile = ConfigurationManager.AppSettings["DBTableFile"];
 
             listOfTable = File.ReadAllLines(dbTableFile)

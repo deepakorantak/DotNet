@@ -2,10 +2,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAI` $$                               
+DROP TRIGGER IF EXISTS `tbc_task_note_RAI` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAI`                               
-AFTER INSERT ON `tbm_county`                               
+TRIGGER `tbc_task_note_RAI`                               
+AFTER INSERT ON `tbc_task_note`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                    
@@ -13,28 +13,26 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_task_note_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
-		active_flag,
+		note_id,
+		author_txt,
+		context_id,
+		context_type,
 		modified_by,
 		modified_dttm,
+		notes_txt,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
-		NEW.active_flag,
+		NEW.note_id,
+		NEW.author_txt,
+		NEW.context_id,
+		NEW.context_type,
 		NEW.modified_by,
 		NEW.modified_dttm,
+		NEW.notes_txt,
 		NEW.version_no );
  
 END$$ 
@@ -42,10 +40,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbc_task_note_RAU` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAU`                               
-AFTER UPDATE ON `tbm_county`                               
+TRIGGER `tbc_task_note_RAU`                               
+AFTER UPDATE ON `tbc_task_note`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                      
@@ -55,28 +53,26 @@ BEGIN
 		SELECT 'SoftDelete' INTO operation_value;                                    
 	END IF;
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_task_note_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
-		active_flag,
+		note_id,
+		author_txt,
+		context_id,
+		context_type,
 		modified_by,
 		modified_dttm,
+		notes_txt,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
-		NEW.active_flag,
+		NEW.note_id,
+		NEW.author_txt,
+		NEW.context_id,
+		NEW.context_type,
 		NEW.modified_by,
 		NEW.modified_dttm,
+		NEW.notes_txt,
 		NEW.version_no );
  
 END$$ 
@@ -84,10 +80,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RBD` $$                                 
+DROP TRIGGER IF EXISTS `tbc_task_note_RBD` $$                                 
 CREATE                                 
-TRIGGER `tbm_county_RBD`                                 
-BEFORE DELETE ON `tbm_county`                                 
+TRIGGER `tbc_task_note_RBD`                                 
+BEFORE DELETE ON `tbc_task_note`                                 
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                        
@@ -95,28 +91,26 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_task_note_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
-		active_flag,
+		note_id,
+		author_txt,
+		context_id,
+		context_type,
 		modified_by,
 		modified_dttm,
+		notes_txt,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		OLD.fips_code,
-		OLD.state_code,
-		OLD.county_code,
-		OLD.county_name,
-		OLD.remi_code,
-		OLD.active_flag,
+		OLD.note_id,
+		OLD.author_txt,
+		OLD.context_id,
+		OLD.context_type,
 		OLD.modified_by,
 		OLD.modified_dttm,
+		OLD.notes_txt,
 		OLD.version_no );
  
 END$$ 

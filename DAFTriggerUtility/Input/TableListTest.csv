@@ -1,0 +1,2 @@
+table_name,history_table,RBI,RAI,RBU,RAU,RBD,RAD,SBI,SAI,SBU,SAU,SBD,SAD,colum_list
+tbc_allocation,tbc_allocation_history,Y,Y,Y,Y,Y,N,N,N,N,N,N,N,allocation_id|active_flag|modified_by|modified_dttm|version_no|due_date|entity_id|entity_type|group_cd|status|user_cd|work_type_cd

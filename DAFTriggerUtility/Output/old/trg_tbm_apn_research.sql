@@ -2,6 +2,22 @@ DELIMITER $$
 
  Use `daf2` $$
 
+DROP TRIGGER IF EXISTS `tbm_apn_research_RBI` $$                             
+CREATE                             
+TRIGGER `tbm_apn_research_RBI`                             
+BEFORE INSERT ON `tbm_apn_research`                             
+FOR EACH ROW
+BEGIN 
+	SET NEW.modified_dttm = NOW();                                   
+	SET NEW.version_no = 1;                                    
+	 
+	/*No trigger condition*/ 
+ 
+END$$ 
+DELIMITER $$
+
+ Use `daf2` $$
+
 DROP TRIGGER IF EXISTS `tbm_apn_research_RAI` $$                               
 CREATE                               
 TRIGGER `tbm_apn_research_RAI`                               
@@ -13,9 +29,8 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_apn_research_history ( history_id,                                                       
-		operation,                                                       
-		system_dttm,                                                       
+	INSERT INTO tbm_apn_research_history ( history_id,                                                     
+		operation,                                                     
 		apn_research_id,
 		fips_code,
 		muncipality_code,
@@ -98,9 +113,8 @@ BEGIN
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
-		operation_value,                                                       
-		NOW(),                                                       
+		version_no ) VALUES (  NULL,                                                     
+		operation_value,                                                     
 		NEW.apn_research_id,
 		NEW.fips_code,
 		NEW.muncipality_code,
@@ -190,22 +204,27 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_apn_research_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbm_apn_research_RBU` $$                               
 CREATE                               
-TRIGGER `tbm_apn_research_RAU`                               
-AFTER UPDATE ON `tbm_apn_research`                               
+TRIGGER `tbm_apn_research_RBU`                               
+BEFORE UPDATE ON `tbm_apn_research`                               
 FOR EACH ROW
 BEGIN 
-	DECLARE operation_value VARCHAR(20);                                      
-	SELECT 'Update' INTO operation_value;                                                                                                            
+	DECLARE operation_value VARCHAR(20);                                     
+	SELECT 'Update' INTO operation_value;                                     
+	SET NEW.modified_dttm = NOW();                                                                          
 	
-	IF NEW.active_flag = 'D' THEN                                    
-		SELECT 'SoftDelete' INTO operation_value;                                    
+	IF OLD.version_no != NEW.version_no THEN                                  
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Version Mismatch' ;                                 
+	END IF;
+                                 
+	SET NEW.version_no = NEW.version_no + 1;                                  
+	IF NEW.active_flag = 'D' THEN                                  
+		SELECT 'SoftDelete' INTO operation_value;                                  
 	END IF;
 
-	INSERT INTO tbm_apn_research_history ( history_id,                                                       
-		operation,                                                       
-		system_dttm,                                                       
+	INSERT INTO tbm_apn_research_history ( history_id,                                                     
+		operation,                                                     
 		apn_research_id,
 		fips_code,
 		muncipality_code,
@@ -288,9 +307,8 @@ BEGIN
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
-		operation_value,                                                       
-		NOW(),                                                       
+		version_no ) VALUES (  NULL,                                                     
+		operation_value,                                                     
 		NEW.apn_research_id,
 		NEW.fips_code,
 		NEW.muncipality_code,
@@ -393,7 +411,6 @@ BEGIN
 
 	INSERT INTO tbm_apn_research_history ( history_id,                                                       
 		operation,                                                       
-		system_dttm,                                                       
 		apn_research_id,
 		fips_code,
 		muncipality_code,
@@ -478,7 +495,6 @@ BEGIN
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
-		NOW(),                                                       
 		OLD.apn_research_id,
 		OLD.fips_code,
 		OLD.muncipality_code,

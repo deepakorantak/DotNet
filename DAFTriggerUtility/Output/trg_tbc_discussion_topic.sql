@@ -2,10 +2,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAI` $$                               
+DROP TRIGGER IF EXISTS `tbc_discussion_topic_RAI` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAI`                               
-AFTER INSERT ON `tbm_county`                               
+TRIGGER `tbc_discussion_topic_RAI`                               
+AFTER INSERT ON `tbc_discussion_topic`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                    
@@ -13,39 +13,43 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_discussion_topic_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		topic_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		author_txt,
+		created_dttm,
+		topic_category,
+		topic_description_txt,
+		topic_title_txt,
+		viewed ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.topic_id,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
-		NEW.version_no );
+		NEW.version_no,
+		NEW.author_txt,
+		NEW.created_dttm,
+		NEW.topic_category,
+		NEW.topic_description_txt,
+		NEW.topic_title_txt,
+		NEW.viewed );
  
 END$$ 
 DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbc_discussion_topic_RAU` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAU`                               
-AFTER UPDATE ON `tbm_county`                               
+TRIGGER `tbc_discussion_topic_RAU`                               
+AFTER UPDATE ON `tbc_discussion_topic`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                      
@@ -55,39 +59,43 @@ BEGIN
 		SELECT 'SoftDelete' INTO operation_value;                                    
 	END IF;
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_discussion_topic_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		topic_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		author_txt,
+		created_dttm,
+		topic_category,
+		topic_description_txt,
+		topic_title_txt,
+		viewed ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.topic_id,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
-		NEW.version_no );
+		NEW.version_no,
+		NEW.author_txt,
+		NEW.created_dttm,
+		NEW.topic_category,
+		NEW.topic_description_txt,
+		NEW.topic_title_txt,
+		NEW.viewed );
  
 END$$ 
 DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RBD` $$                                 
+DROP TRIGGER IF EXISTS `tbc_discussion_topic_RBD` $$                                 
 CREATE                                 
-TRIGGER `tbm_county_RBD`                                 
-BEFORE DELETE ON `tbm_county`                                 
+TRIGGER `tbc_discussion_topic_RBD`                                 
+BEFORE DELETE ON `tbc_discussion_topic`                                 
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                        
@@ -95,28 +103,32 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbc_discussion_topic_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		topic_id,
 		active_flag,
 		modified_by,
 		modified_dttm,
-		version_no ) VALUES (  NULL,                                                       
+		version_no,
+		author_txt,
+		created_dttm,
+		topic_category,
+		topic_description_txt,
+		topic_title_txt,
+		viewed ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		OLD.fips_code,
-		OLD.state_code,
-		OLD.county_code,
-		OLD.county_name,
-		OLD.remi_code,
+		OLD.topic_id,
 		OLD.active_flag,
 		OLD.modified_by,
 		OLD.modified_dttm,
-		OLD.version_no );
+		OLD.version_no,
+		OLD.author_txt,
+		OLD.created_dttm,
+		OLD.topic_category,
+		OLD.topic_description_txt,
+		OLD.topic_title_txt,
+		OLD.viewed );
  
 END$$ 

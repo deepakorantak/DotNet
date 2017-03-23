@@ -2,10 +2,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAI` $$                               
+DROP TRIGGER IF EXISTS `tbm_sub_document_type_new_RAI` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAI`                               
-AFTER INSERT ON `tbm_county`                               
+TRIGGER `tbm_sub_document_type_new_RAI`                               
+AFTER INSERT ON `tbm_sub_document_type_new`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                    
@@ -13,25 +13,23 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbm_sub_document_type_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		bid,
+		damar_code,
+		document_type_id,
+		sub_document_type_name,
 		active_flag,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.bid,
+		NEW.damar_code,
+		NEW.document_type_id,
+		NEW.sub_document_type_name,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
@@ -42,10 +40,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RAU` $$                               
+DROP TRIGGER IF EXISTS `tbm_sub_document_type_new_RAU` $$                               
 CREATE                               
-TRIGGER `tbm_county_RAU`                               
-AFTER UPDATE ON `tbm_county`                               
+TRIGGER `tbm_sub_document_type_new_RAU`                               
+AFTER UPDATE ON `tbm_sub_document_type_new`                               
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                      
@@ -55,25 +53,23 @@ BEGIN
 		SELECT 'SoftDelete' INTO operation_value;                                    
 	END IF;
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbm_sub_document_type_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		bid,
+		damar_code,
+		document_type_id,
+		sub_document_type_name,
 		active_flag,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		NEW.fips_code,
-		NEW.state_code,
-		NEW.county_code,
-		NEW.county_name,
-		NEW.remi_code,
+		NEW.bid,
+		NEW.damar_code,
+		NEW.document_type_id,
+		NEW.sub_document_type_name,
 		NEW.active_flag,
 		NEW.modified_by,
 		NEW.modified_dttm,
@@ -84,10 +80,10 @@ DELIMITER $$
 
  Use `daf2` $$
 
-DROP TRIGGER IF EXISTS `tbm_county_RBD` $$                                 
+DROP TRIGGER IF EXISTS `tbm_sub_document_type_new_RBD` $$                                 
 CREATE                                 
-TRIGGER `tbm_county_RBD`                                 
-BEFORE DELETE ON `tbm_county`                                 
+TRIGGER `tbm_sub_document_type_new_RBD`                                 
+BEFORE DELETE ON `tbm_sub_document_type_new`                                 
 FOR EACH ROW
 BEGIN 
 	DECLARE operation_value VARCHAR(20);                                        
@@ -95,25 +91,23 @@ BEGIN
 	 
 	/*No trigger condition*/ 
 
-	INSERT INTO tbm_county_history ( history_id,                                                       
+	INSERT INTO tbm_sub_document_type_history ( history_id,                                                       
 		operation,                                                       
 		system_dttm,                                                       
-		fips_code,
-		state_code,
-		county_code,
-		county_name,
-		remi_code,
+		bid,
+		damar_code,
+		document_type_id,
+		sub_document_type_name,
 		active_flag,
 		modified_by,
 		modified_dttm,
 		version_no ) VALUES (  NULL,                                                       
 		operation_value,                                                       
 		NOW(),                                                       
-		OLD.fips_code,
-		OLD.state_code,
-		OLD.county_code,
-		OLD.county_name,
-		OLD.remi_code,
+		OLD.bid,
+		OLD.damar_code,
+		OLD.document_type_id,
+		OLD.sub_document_type_name,
 		OLD.active_flag,
 		OLD.modified_by,
 		OLD.modified_dttm,
