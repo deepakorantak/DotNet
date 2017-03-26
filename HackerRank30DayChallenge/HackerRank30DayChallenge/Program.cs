@@ -12,7 +12,142 @@ namespace HackerRank30DayChallenge
         {
             //ThirtyDayChallengeDay4();
             //ThirtyDayChallengeDay6();
-            ThirtyDayChallengeDay7();
+            //ThirtyDayChallengeDay7();
+            //ThirtyDayChallengeDay8();
+            //ThirtyDayChallengeDay9();
+            ThirtyDayChallengeDay10();
+        }
+
+        private static void ThirtyDayChallengeDay10()
+        {
+            int n = Convert.ToInt32(Console.ReadLine());
+            var res = Convert.ToString(n, 2).SelectMany(a=>a.ToString()).ToArray();
+            int cnt = res.Count();
+            int i = 0,j = 0;
+            int consOnes = 0,preConsOnes = 0;
+            
+
+           while(i < cnt)
+            {
+                if (res[i] == '1'  )
+                {
+                    if (i == 0  )
+                    {
+                        consOnes++;
+                    }
+                    else if(res[j]=='1') 
+                    {
+                        consOnes++;
+                    }
+                    else
+                    {
+                        consOnes = 1;
+
+                    }
+                }
+                else
+                {
+                    preConsOnes = consOnes > preConsOnes ? consOnes : preConsOnes;
+                    consOnes = 0;
+                }
+                j = i;
+                i++;
+
+            }
+
+            consOnes = (preConsOnes > consOnes) ? preConsOnes : consOnes;
+
+            Console.WriteLine(consOnes);
+        }
+
+        private static void ThirtyDayChallengeDay9()
+        {
+            int n = Convert.ToInt32(Console.ReadLine());
+            if (n>= 2 && n<=12)
+            {
+
+               var res =  factorial(n);
+                Console.WriteLine(res);              
+            }
+            
+        }
+
+        private static int factorial(int n)
+        {
+            do
+            {
+
+                if (n == 1)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return n * factorial(--n);
+                }
+
+            }while(n > 0);
+        }
+
+        private static void ThirtyDayChallengeDay8()
+        {
+            int n = Convert.ToInt32(Console.ReadLine());
+            if (n>=1 && n<= Math.Pow(10,5))
+            {
+                Dictionary<string, int> phonebook = new Dictionary<string, int>();
+                
+                string name = "";
+                int phonenumber = 0;
+                string output = "";
+
+                for (int i = 1; i <= n; i++)
+                {
+                    var input = Console.ReadLine().Split(' ');
+                    name = input[0].ToLower();
+                    phonenumber = Convert.ToInt32(input[1]);
+                    phonebook.Add(name, phonenumber);
+                }
+
+                var query = true;
+                List<string> queryNames = new List<string>();
+                string queryName = "";
+                int cnt = 0;
+
+                do
+                {
+                    queryName = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(queryName) && cnt <= Math.Pow(10, 5))
+                    {
+                        queryNames.Add(queryName);
+                        ++cnt;
+
+                    }
+                    else
+                    {
+                        query = false;
+
+                    }
+
+                } while (query);
+
+               
+
+                foreach (var item in queryNames)
+                {
+
+                    if (phonebook.ContainsKey(item))
+                    {
+                        Console.WriteLine($"{item}={ phonebook[item]}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not found");
+                    }
+                }
+
+                Console.ReadLine();
+
+            }
         }
 
         private static void ThirtyDayChallengeDay7()
