@@ -13,6 +13,7 @@ namespace PatternMatching
         public string id { get; set; }
         public string laaddatum{ get; set; }
         public string iban { get; set; }
+        public string companyCode { get; set; }
         public string statementNumber { get; set; }
         public string entryDate { get; set; }
         public string valueDate { get; set; }
@@ -38,6 +39,8 @@ namespace PatternMatching
     public static class ProcessTransactionList
     {
         private static List<Transaction> listofTransactions { get; set; }
+
+        private static List<AccountMapping> listofAccountMappings = ProcessAccountMapping.GetAccountMappings("D:\\Deepa\\Projects\\VGZ\\Robot\\input\\accountsInScope.csv");
         public static List<Transaction> GetTransactions(DataTable sourceDataTable)
         {
             listofTransactions = new List<Transaction>();
@@ -57,7 +60,9 @@ namespace PatternMatching
                 valueDate = dr["VALUE_DATE"].ToString(),
                 omschrijving = dr["OMSCHRIJVING"].ToString(),
                 amount = dr["AMOUNT"].ToString(),
-                naamTegenpartij = dr["NAAM_TEGENPARTIJ"].ToString()
+                naamTegenpartij = dr["NAAM_TEGENPARTIJ"].ToString(),
+                companyCode = listofAccountMappings.Where(s=> s.iban == dr["IBAN"].ToString()).Select(s=>s.companyCode).First()
+
             };
         }
 
@@ -80,8 +85,8 @@ namespace PatternMatching
                                     omschrijving = str[6],
                                     amount = str[7],
                                     naamTegenpartij = str[8],
-                                    glAccountNumber = "NA"
-
+                                    glAccountNumber = "NA",
+                                    companyCode = listofAccountMappings.Where(a => a.iban == str[2]).Select(a => a.companyCode).First()
                                 };
                             }
                        ).ToList();

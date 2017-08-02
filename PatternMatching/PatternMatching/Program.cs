@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
 using System.IO;
 
 namespace PatternMatching
@@ -20,12 +17,14 @@ namespace PatternMatching
 
             Process();
 
-            //Console.WriteLine("Completed");
-         
+            Console.WriteLine("Completed");
+
+
+
 
 
         }
-
+        
         static void Process()
         {
 
@@ -44,17 +43,25 @@ namespace PatternMatching
             notmatchedList = sourceTrans.Except(matchedList, new TransactionComparer()).ToList();
             sourceTrans = notmatchedList.Union(matchedList).ToList();
 
+            matchedList = patternConfig.Where(p => p.isAdditionPattern == "AFR")
+                          .SelectMany(p => { return MatchingAFRPattern(p); })
+                          .ToList();
+
+            notmatchedList = sourceTrans.Except(matchedList, new TransactionComparer()).ToList();
+            sourceTrans = notmatchedList.Union(matchedList).ToList();
+
             using (var file = File.CreateText("D:\\Deepa\\Projects\\VGZ\\Robot\\output\\maptransactions.csv"))
             {
 
-                file.WriteLine("id|load_date|iban|statement_numbe|entry_date|value_date|glaccount|amount|remarks|additional");
-                sourceTrans.ForEach(t =>  file.WriteLine(string.Join("|", new[] {t.id,t.laaddatum,t.iban,t.statementNumber,t.entryDate,
+                file.WriteLine("id|load_date|iban|companycode|statement_numbe|entry_date|value_date|glaccount|amount|remarks|additional");
+                sourceTrans.ForEach(t =>  file.WriteLine(string.Join("|", new[] {t.id,t.laaddatum,t.iban,t.companyCode,t.statementNumber,t.entryDate,
                                                                                  t.valueDate,t.glAccountNumber,t.amount,t.omschrijving,t.naamTegenpartij })));
               
             }
 
             Console.WriteLine("Process completed");
         }
+
 
         private static IEnumerable<Transaction> MatchingBasicPattern(Pattern p)
         {
@@ -71,7 +78,8 @@ namespace PatternMatching
                                                 omschrijving = s.omschrijving,
                                                 amount = s.amount,
                                                 naamTegenpartij = s.naamTegenpartij,
-                                                glAccountNumber = p.glAccountNumber
+                                                glAccountNumber = p.glAccountNumber,
+                                                companyCode =s.companyCode
                                             }
                                 );
 
@@ -97,9 +105,43 @@ namespace PatternMatching
                                                     omschrijving = s.omschrijving,
                                                     amount = s.amount,
                                                     naamTegenpartij = s.naamTegenpartij,
-                                                    glAccountNumber = p.glAccountNumber
+                                                    glAccountNumber = p.glAccountNumber,
+                                                    companyCode = s.companyCode
+                              }
+                                    );
+        }
+
+        private static IEnumerable<Transaction> MatchingAFRPattern(Pattern p)
+        {
+            var regexMain = new Regex(p.mainPattern);
+           
+            return sourceTrans.Where(s => regexMain.IsMatch(s.omschrijving.ToLower()))
+                              .Select(s => new Transaction
+                                                {
+                                                    id = s.id,
+                                                    laaddatum = s.laaddatum,
+                                                    iban = s.iban,
+                                                    statementNumber = s.statementNumber,
+                                                    entryDate = s.entryDate,
+                                                    valueDate = s.valueDate,
+                                                    omschrijving = s.omschrijving,
+                                                    amount = s.amount,
+                                                    naamTegenpartij = s.naamTegenpartij,
+                                                    glAccountNumber = GetAccounts(s.omschrijving, " - " + s.companyCode),
+                                                    companyCode = s.companyCode
                                                 }
                                     );
+        }
+
+        private static string GetAccounts(string inputString, string matchingCode)
+        {
+           
+            var startindex = inputString.IndexOf(matchingCode, 0) + matchingCode.Count();
+            var endindex = inputString.IndexOf(" - ", startindex);
+            var numberChars = ((endindex - startindex) < 0) ? inputString.Length - startindex : endindex - startindex;
+            var res = inputString.Substring(startindex, numberChars).Trim().Replace(":", "");
+
+            return res;
         }
     }
 }
