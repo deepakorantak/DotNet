@@ -85,7 +85,6 @@ namespace PatternMatching
 
         }
 
-
         private static IEnumerable<Transaction> MatchingAdditionPattern(Pattern p)
         {
             var regexMain = new Regex(p.mainPattern);
@@ -127,7 +126,7 @@ namespace PatternMatching
                                                     omschrijving = s.omschrijving,
                                                     amount = s.amount,
                                                     naamTegenpartij = s.naamTegenpartij,
-                                                    glAccountNumber = GetAccounts(s.omschrijving, " - " + s.companyCode),
+                                                    glAccountNumber = GetAccounts(s.omschrijving, " " + s.companyCode),
                                                     companyCode = s.companyCode
                                                 }
                                     );
@@ -137,7 +136,7 @@ namespace PatternMatching
         {
            
             var startindex = inputString.IndexOf(matchingCode, 0) + matchingCode.Count();
-            var endindex = inputString.IndexOf(" - ", startindex);
+            var endindex = inputString.IndexOf(" ", startindex + 2);
             var numberChars = ((endindex - startindex) < 0) ? inputString.Length - startindex : endindex - startindex;
             var res = inputString.Substring(startindex, numberChars).Trim().Replace(":", "");
 
