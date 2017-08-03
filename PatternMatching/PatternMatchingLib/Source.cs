@@ -6,21 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PatternMatching
+namespace PatternMatchingLib
 {
     public class Transaction
     {
         public string id { get; set; }
-        public string laaddatum{ get; set; }
+        public string load_date{ get; set; }
         public string iban { get; set; }
         public string companyCode { get; set; }
         public string statementNumber { get; set; }
         public string entryDate { get; set; }
         public string valueDate { get; set; }
-        public string omschrijving { get; set; }
+        public string transactionDescription { get; set; }
         public string amount { get; set; }
         public string glAccountNumber { get; set; }
-        public string naamTegenpartij { get; set; }
+        public string additionaInfo { get; set; }
         public string codaDescription { get; set; }
     }
 
@@ -39,39 +39,40 @@ namespace PatternMatching
     }
     public static class ProcessTransactionList
     {
-        private static List<Transaction> listofTransactions { get; set; }
-
-        private static List<AccountMapping> listofAccountMappings = ProcessAccountMapping.GetAccountMappings("D:\\Deepa\\Projects\\VGZ\\Robot\\input\\accountsInScope.csv");
-        public static List<Transaction> GetTransactions(DataTable sourceDataTable)
+   
+        public static List<Transaction> GetTransactions(DataTable sourceDataTable,DataTable accountMapping)
         {
-            listofTransactions = new List<Transaction>();
-            return  listofTransactions = sourceDataTable.AsEnumerable().Select(dr => { return GetTransaction(dr); }).ToList();          
+           
+            List<AccountMapping> listofAccountMappings = ProcessAccountMapping.GetAccountMappings(accountMapping);
+            return  sourceDataTable.AsEnumerable().Select(dr => { return GetTransaction(dr, listofAccountMappings); }).ToList();          
             
         }
 
-        private static Transaction GetTransaction(DataRow dr)
+        private static Transaction GetTransaction(DataRow dr,List<AccountMapping> listofAccountMappings)
         {
             return new Transaction
             {
                 id = dr["ID"].ToString(),
-                laaddatum = dr["LAADDATUM"].ToString(),
+                load_date = dr["LAADDATUM"].ToString(),
                 iban = dr["IBAN"].ToString(),
                 companyCode = listofAccountMappings.Where(s => s.iban == dr["IBAN"].ToString()).Select(s => s.companyCode).First(),
                 statementNumber = dr["STATEMENT_NUMBER"].ToString(),
                 entryDate = dr["ENTRY_DATE"].ToString(),
                 valueDate = dr["VALUE_DATE"].ToString(),
-                omschrijving = dr["OMSCHRIJVING"].ToString(),
+                transactionDescription = dr["OMSCHRIJVING"].ToString(),
                 amount = dr["AMOUNT"].ToString(),
-                naamTegenpartij = dr["NAAM_TEGENPARTIJ"].ToString(),
+                additionaInfo = dr["NAAM_TEGENPARTIJ"].ToString(),
+                glAccountNumber = "NA",
                 codaDescription = ""
 
             };
         }
 
-        public static List<Transaction> GetTransactions(String filePath)
+        public static List<Transaction> GetTransactions(string sourceFilePath,string accountMappingPath )
         {
-            listofTransactions = new List<Transaction>();
-            return listofTransactions = File.ReadAllLines(filePath)
+
+            List<AccountMapping> listofAccountMappings = ProcessAccountMapping.GetAccountMappings(accountMappingPath);            
+            return  File.ReadAllLines(sourceFilePath)
                 .Skip(1)
                 .Select(s =>
                             {
@@ -79,15 +80,15 @@ namespace PatternMatching
                                 return new Transaction
                                 {
                                     id = str[0],
-                                    laaddatum = str[1],
+                                    load_date = str[1],
                                     iban = str[2],
                                     companyCode = listofAccountMappings.Where(a => a.iban == str[2]).Select(a => a.companyCode).First(),
                                     statementNumber = str[3],
                                     entryDate = str[4],
                                     valueDate = str[5],
-                                    omschrijving = str[6],
+                                    transactionDescription = str[6],
                                     amount = str[7],
-                                    naamTegenpartij = str[8],
+                                    additionaInfo = str[8],
                                     glAccountNumber = "NA",
                                     codaDescription = ""
                                     

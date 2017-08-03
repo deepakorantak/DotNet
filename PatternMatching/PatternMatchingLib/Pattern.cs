@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 
 
-namespace PatternMatching
+namespace PatternMatchingLib
 {
     public class Pattern
     {

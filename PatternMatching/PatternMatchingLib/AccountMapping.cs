@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 
 
-namespace PatternMatching
+namespace PatternMatchingLib
 {
     public class AccountMapping
     {
@@ -16,12 +16,11 @@ namespace PatternMatching
 
     public static class ProcessAccountMapping
     {
-        private static List<AccountMapping> listofAccountMapping;
-
+      
         public static List<AccountMapping> GetAccountMappings(DataTable sourceDataTable)
         {
-            listofAccountMapping = new List<AccountMapping>();
-            return listofAccountMapping = sourceDataTable.AsEnumerable().Select(dr => { return GetAccountMappings(dr); }).ToList();
+           
+            return sourceDataTable.AsEnumerable().Select(dr => { return GetAccountMappings(dr); }).ToList();
 
         }
 
@@ -36,8 +35,8 @@ namespace PatternMatching
 
         public static List<AccountMapping> GetAccountMappings(String filePath)
         {
-            listofAccountMapping = new List<AccountMapping>();
-            return listofAccountMapping = File.ReadAllLines(filePath)
+           
+            return  File.ReadAllLines(filePath)
                 .Skip(1)
                 .Select(s =>
                             {
