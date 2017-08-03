@@ -123,14 +123,14 @@ namespace PatternMatching
                                   omschrijving = s.omschrijving,
                                   amount = s.amount,
                                   naamTegenpartij = s.naamTegenpartij,
-                                  glAccountNumber = GetAccounts(s.omschrijving, " " + s.companyCode),
+                                  glAccountNumber = GetAccount(s.omschrijving, " " + s.companyCode),
                                   companyCode = s.companyCode,
                                   codaDescription = GetCODADescription(p.codaDescription, s.omschrijving)
                               }
                                     );
         }
 
-        private static string GetAccounts(string inputString, string matchingCode)
+        private static string GetAccount(string inputString, string matchingCode)
         {
 
             var startindex = inputString.IndexOf(matchingCode, 0) + matchingCode.Count();

@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternMatching", "PatternMatching\PatternMatching.csproj", "{4308DD79-1437-4069-8B5D-3B67CCA29174}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternMatchingLib", "PatternMatchingLib\PatternMatchingLib.csproj", "{23285F9F-4399-4215-8FA7-77AE62DE17FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4308DD79-1437-4069-8B5D-3B67CCA29174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4308DD79-1437-4069-8B5D-3B67CCA29174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4308DD79-1437-4069-8B5D-3B67CCA29174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23285F9F-4399-4215-8FA7-77AE62DE17FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23285F9F-4399-4215-8FA7-77AE62DE17FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23285F9F-4399-4215-8FA7-77AE62DE17FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23285F9F-4399-4215-8FA7-77AE62DE17FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
