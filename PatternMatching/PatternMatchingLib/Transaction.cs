@@ -11,7 +11,7 @@ namespace PatternMatchingLib
     public class Transaction
     {
         public string id { get; set; }
-        public string load_date{ get; set; }
+        public string loadDate{ get; set; }
         public string iban { get; set; }
         public string companyCode { get; set; }
         public string statementNumber { get; set; }
@@ -53,7 +53,7 @@ namespace PatternMatchingLib
             return new Transaction
             {
                 id = dr["ID"].ToString(),
-                load_date = dr["LAADDATUM"].ToString(),
+                loadDate = dr["LAADDATUM"].ToString(),
                 iban = dr["IBAN"].ToString(),
                 companyCode = listofAccountMappings.Where(s => s.iban == dr["IBAN"].ToString()).Select(s => s.companyCode).First(),
                 statementNumber = dr["STATEMENT_NUMBER"].ToString(),
@@ -80,7 +80,7 @@ namespace PatternMatchingLib
                                 return new Transaction
                                 {
                                     id = str[0],
-                                    load_date = str[1],
+                                    loadDate = str[1],
                                     iban = str[2],
                                     companyCode = listofAccountMappings.Where(a => a.iban == str[2]).Select(a => a.companyCode).First(),
                                     statementNumber = str[3],

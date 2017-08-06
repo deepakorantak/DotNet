@@ -23,40 +23,45 @@ namespace PatternMatchingLib
         public InArgument<DataTable> transactionMappingDataTable { get; set; }
 
         [Category("Output")]        
+        public OutArgument<DataTable> mappedTransactionDataTable { get; set; }
+
+
+        [Category("Output")]
         public OutArgument<List<Transaction>> mappedTransactionList { get; set; }
 
+        List<Transaction> sourceTrans { get; set; }
+        List<TransctionMapping> patternConfig { get; set; }
 
-        static List<Transaction> sourceTrans;
-        static List<Pattern> patternConfig;
 
         protected override void Execute(CodeActivityContext context)
         {
             var sourceDT = sourceDataTable.Get(context);
             var accountMappingDT = accountMappingDataTable.Get(context);
             var transactionMappingDT = transactionMappingDataTable.Get(context);
-            mappedTransactionList.Set(context, Process(sourceDT, accountMappingDT, transactionMappingDT));
-           
+            var resultTRans = Process(sourceDT, accountMappingDT, transactionMappingDT);
+            mappedTransactionList.Set(context, resultTRans);
+            mappedTransactionDataTable.Set(context, TransformToDataTable(resultTRans));
+
         }
 
-        public static List<Transaction> Process(string sourcePath,string accountMappingPath,string transactionmMappingPath)
+        public List<Transaction> Process(string sourceTransactiosPath,string accountMappingPath,string transactionmMappingPath)
         {
-            sourceTrans = ProcessTransactionList.GetTransactions(sourcePath, accountMappingPath);
-            patternConfig = ProcessPatternList.GetPatterns(transactionmMappingPath);
-
-            return GetFinalTransactions();
+            sourceTrans = ProcessTransactionList.GetTransactions(sourceTransactiosPath, accountMappingPath);
+            patternConfig = ProcessTransactionMappingList.GetTransactionMapping(transactionmMappingPath);
+            return  GetFinalTransactions();         
 
         }
 
-        public static List<Transaction> Process(DataTable sourceTransactions, DataTable accountMapping,DataTable transactionMapping)
+        public List<Transaction> Process(DataTable sourceTransactions, DataTable accountMapping,DataTable transactionMapping)
         {
 
             sourceTrans = ProcessTransactionList.GetTransactions(sourceTransactions, accountMapping);
-            patternConfig = ProcessPatternList.GetPatterns(transactionMapping);
+            patternConfig = ProcessTransactionMappingList.GetPatterns(transactionMapping);
 
-            return GetFinalTransactions();
+           return  GetFinalTransactions();           
         }
 
-        private static List<Transaction> GetFinalTransactions()
+        private  List<Transaction> GetFinalTransactions()
         {
             var matchedList = patternConfig.Where(p => p.isAdditionPattern == "NA")
                                                   .SelectMany(p => { return MatchingBasicPattern(p); })
@@ -79,27 +84,18 @@ namespace PatternMatchingLib
             notmatchedList = sourceTrans.Except(matchedList, new TransactionComparer()).ToList();
             sourceTrans = notmatchedList.Union(matchedList).ToList();
 
-            using (var file = File.CreateText("D:\\Deepa\\Projects\\VGZ\\Robot\\output\\maptransactions.csv"))
-            {
-
-                file.WriteLine("id|load_date|iban|companycode|statement_numbe|entry_date|value_date|glaccount|amount|codadesc|remarks|additional");
-                sourceTrans.ForEach(t => file.WriteLine(string.Join("|", new[] {t.id,t.load_date,t.iban,t.companyCode,t.statementNumber,t.entryDate,
-                                                                                 t.valueDate,t.glAccountNumber,t.amount,t.codaDescription,t.transactionDescription,t.additionaInfo })));
-
-            }
-
             Console.WriteLine("Process completed");
             return sourceTrans;
         }
 
-        private static IEnumerable<Transaction> MatchingBasicPattern(Pattern p)
+        private  IEnumerable<Transaction> MatchingBasicPattern(TransctionMapping p)
         {
             var regex = new Regex(p.mainPattern);
             return sourceTrans.Where(s => regex.IsMatch(s.transactionDescription.ToLower()))
                                .Select(s => new Transaction
                                {
                                    id = s.id,
-                                   load_date = s.load_date,
+                                   loadDate = s.loadDate,
                                    iban = s.iban,
                                    statementNumber = s.statementNumber,
                                    entryDate = s.entryDate,
@@ -115,7 +111,7 @@ namespace PatternMatchingLib
                                 );
         }
  
-        private static IEnumerable<Transaction> MatchingAdditionPattern(Pattern p)
+        private  IEnumerable<Transaction> MatchingAdditionPattern(TransctionMapping p)
         {
             var regexMain = new Regex(p.mainPattern);
             var regexAdd = new Regex(p.additionPattern);
@@ -126,7 +122,7 @@ namespace PatternMatchingLib
                               .Select(s => new Transaction
                               {
                                   id = s.id,
-                                  load_date = s.load_date,
+                                  loadDate = s.loadDate,
                                   iban = s.iban,
                                   statementNumber = s.statementNumber,
                                   entryDate = s.entryDate,
@@ -141,7 +137,7 @@ namespace PatternMatchingLib
                                     );
         }
 
-        private static IEnumerable<Transaction> MatchingAFRPattern(Pattern p)
+        private  IEnumerable<Transaction> MatchingAFRPattern(TransctionMapping p)
         {
             var regexMain = new Regex(p.mainPattern);
 
@@ -149,7 +145,7 @@ namespace PatternMatchingLib
                               .Select(s => new Transaction
                               {
                                   id = s.id,
-                                  load_date = s.load_date,
+                                  loadDate = s.loadDate,
                                   iban = s.iban,
                                   statementNumber = s.statementNumber,
                                   entryDate = s.entryDate,
@@ -164,7 +160,7 @@ namespace PatternMatchingLib
                                     );
         }
 
-        private static string GetAccount(string inputString, string matchingCode)
+        private  string GetAccount(string inputString, string matchingCode)
         {
 
             var startindex = inputString.IndexOf(matchingCode, 0) + matchingCode.Count();
@@ -175,7 +171,7 @@ namespace PatternMatchingLib
             return res;
         }
 
-        private static string GetCODADescription(string config, string omschrijving)
+        private  string GetCODADescription(string config, string omschrijving)
         {
 
             if (config.Contains("OMSCHRIJVING"))
@@ -193,6 +189,45 @@ namespace PatternMatchingLib
             };
 
             return config;
+        }
+
+        public  DataTable TransformToDataTable(List<Transaction> listTran)
+        {
+
+            DataTable tempTable = new DataTable();
+            tempTable.Columns.Add("id", typeof(string));
+            tempTable.Columns.Add("loadDate", typeof(string));
+            tempTable.Columns.Add("iban", typeof(string));
+            tempTable.Columns.Add("companyCode", typeof(string));
+            tempTable.Columns.Add("statementNumber", typeof(string));
+            tempTable.Columns.Add("entryDate", typeof(string));
+            tempTable.Columns.Add("valueDate", typeof(string));
+            tempTable.Columns.Add("transactionDescription", typeof(string));
+            tempTable.Columns.Add("amount", typeof(string));
+            tempTable.Columns.Add("glAccountNumber", typeof(string));
+            tempTable.Columns.Add("additionaInfo", typeof(string));
+            tempTable.Columns.Add("codaDescription", typeof(string));
+            listTran.ForEach(s =>
+                                    {
+                                        var dr = tempTable.NewRow();
+                                        dr["id"] = s.id; 
+                                        dr["loadDate"] = s.loadDate; 
+                                        dr["iban"] = s.iban; 
+                                        dr["companyCode"] = s.companyCode; 
+                                        dr["statementNumber"] = s.statementNumber;
+                                        dr["entryDate"] = s.entryDate; 
+                                        dr["valueDate"] = s.valueDate; 
+                                        dr["transactionDescription"] = s.transactionDescription;
+                                        dr["amount"] = s.amount; ;
+                                        dr["glAccountNumber"] = s.glAccountNumber ;
+                                        dr["additionaInfo"] = s.additionaInfo ;
+                                        dr["codaDescription"] = s.codaDescription ;
+                                        tempTable.Rows.Add(dr);
+                                        tempTable.AcceptChanges();
+                                    }
+                                );
+
+            return tempTable;
         }
 
 

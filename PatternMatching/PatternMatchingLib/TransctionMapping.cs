@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace PatternMatchingLib
 {
-    public class Pattern
+    public class TransctionMapping
     {
         public String mainPattern { get; set; }
         public String isAdditionPattern { get; set; }
@@ -16,19 +16,19 @@ namespace PatternMatchingLib
         public String codaDescription { get; set; }
     }
 
-    public static class ProcessPatternList
+    public static class ProcessTransactionMappingList
     {
-        private static List<Pattern> listofPatterns { get; set; }
-        public static List<Pattern> GetPatterns(DataTable confiDataTable)
+        private static List<TransctionMapping> listofPatterns { get; set; }
+        public static List<TransctionMapping> GetPatterns(DataTable confiDataTable)
         {
-            listofPatterns = new List<Pattern>();
-            return listofPatterns = confiDataTable.AsEnumerable().Select(dr => { return GetPattern(dr); }).ToList();
+            listofPatterns = new List<TransctionMapping>();
+            return listofPatterns = confiDataTable.AsEnumerable().Select(dr => { return GetTransactionMapping(dr); }).ToList();
 
         }
 
-        private static Pattern GetPattern(DataRow dr)
+        private static TransctionMapping GetTransactionMapping(DataRow dr)
         {
-            return new Pattern
+            return new TransctionMapping
             {
                 mainPattern = dr["MAINPATTERN"].ToString(),
                 isAdditionPattern = dr["ISADDITIONPATTERN"].ToString(),
@@ -38,15 +38,15 @@ namespace PatternMatchingLib
             };
         }
 
-        public static List<Pattern> GetPatterns(String filePath)
+        public static List<TransctionMapping> GetTransactionMapping(String filePath)
         {
-            listofPatterns = new List<Pattern>();
+            listofPatterns = new List<TransctionMapping>();
             return listofPatterns = File.ReadAllLines(filePath)
                 .Skip(1)
                 .Select(s =>
                                 {
                                     var str = s.Split(',');
-                                    return new Pattern
+                                    return new TransctionMapping
                                     {
                                         mainPattern = str[0],
                                         isAdditionPattern = str[1],
