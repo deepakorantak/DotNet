@@ -10,7 +10,9 @@ namespace PatternMatchingLib
     public class AccountMapping
     {
         public string iban { get; set; }
-        public string companyCode { get; set; }       
+        public string companyCode { get; set; }
+        public string fixedGLAccountNumber { get; set; }
+        public string documentCode { get; set; }
 
     }
 
@@ -29,7 +31,9 @@ namespace PatternMatchingLib
             return new AccountMapping
             {
                 iban = dr["Rekening"].ToString(),
-                companyCode = dr["bedrijf"].ToString()
+                companyCode = dr["bedrijf"].ToString(),
+                fixedGLAccountNumber = dr["glaccount"].ToString(),
+                documentCode = dr["documentcode"].ToString()
             };
         }
 
@@ -44,7 +48,9 @@ namespace PatternMatchingLib
                                 return new AccountMapping
                                 {
                                     iban = str[0],
-                                    companyCode = str[1]
+                                    companyCode = str[1],
+                                    fixedGLAccountNumber = str[2],
+                                    documentCode = str[3]
                                 };
                             }
                        ).ToList();

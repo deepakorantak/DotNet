@@ -14,6 +14,8 @@ namespace PatternMatchingLib
         public string loadDate{ get; set; }
         public string iban { get; set; }
         public string companyCode { get; set; }
+        public string fixedGLAccountNumber { get; set; }
+        public string documentCode { get; set; }
         public string statementNumber { get; set; }
         public string entryDate { get; set; }
         public string valueDate { get; set; }
@@ -55,8 +57,10 @@ namespace PatternMatchingLib
                 id = dr["ID"].ToString(),
                 loadDate = dr["LAADDATUM"].ToString(),
                 iban = dr["IBAN"].ToString(),
-                companyCode = listofAccountMappings.Where(s => s.iban == dr["IBAN"].ToString()).Select(s => s.companyCode).First(),
                 statementNumber = dr["STATEMENT_NUMBER"].ToString(),
+                companyCode = listofAccountMappings.Where(s => s.iban == dr["IBAN"].ToString()).Select(s => s.companyCode).First(),
+                fixedGLAccountNumber = listofAccountMappings.Where(s => s.iban == dr["IBAN"].ToString()).Select(s => s.fixedGLAccountNumber).First(),
+                documentCode = listofAccountMappings.Where(s => s.iban == dr["IBAN"].ToString()).Select(s => s.documentCode).First(),
                 entryDate = dr["ENTRY_DATE"].ToString(),
                 valueDate = dr["VALUE_DATE"].ToString(),
                 transactionDescription = dr["OMSCHRIJVING"].ToString(),
@@ -83,6 +87,8 @@ namespace PatternMatchingLib
                                     loadDate = str[1],
                                     iban = str[2],
                                     companyCode = listofAccountMappings.Where(a => a.iban == str[2]).Select(a => a.companyCode).First(),
+                                    fixedGLAccountNumber = listofAccountMappings.Where(a => a.iban == str[2]).Select(a => a.fixedGLAccountNumber).First(),
+                                    documentCode = listofAccountMappings.Where(a => a.iban == str[2]).Select(a => a.documentCode).First(),
                                     statementNumber = str[3],
                                     entryDate = str[4],
                                     valueDate = str[5],

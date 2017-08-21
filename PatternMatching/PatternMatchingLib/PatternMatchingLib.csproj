@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountMapping.cs" />
+    <Compile Include="MacroOutput.cs" />
     <Compile Include="TransctionMapping.cs" />
     <Compile Include="Start.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

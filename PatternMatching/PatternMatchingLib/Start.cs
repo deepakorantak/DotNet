@@ -28,6 +28,10 @@ namespace PatternMatchingLib
 
         [Category("Output")]
         public OutArgument<List<Transaction>> mappedTransactionList { get; set; }
+       
+        [Category("Output")]
+        [RequiredArgument]
+        public OutArgument<DataTable> mappedMacroDataTable { get; set; }
 
         List<Transaction> sourceTrans { get; set; }
         List<TransctionMapping> patternConfig { get; set; }
@@ -41,6 +45,7 @@ namespace PatternMatchingLib
             var resultTRans = Process(sourceDT, accountMappingDT, transactionMappingDT);
             mappedTransactionList.Set(context, resultTRans);
             mappedTransactionDataTable.Set(context, TransformToDataTable(resultTRans));
+            mappedMacroDataTable.Set(context,TransformToMacroDataTable(resultTRans));
 
         }
 
@@ -186,6 +191,7 @@ namespace PatternMatchingLib
             if (config.Contains("[MM YYYY]"))
             {
                 return config.Replace("[MM YYYY]", DateTime.Now.Month.ToString() + " " + DateTime.Now.Year.ToString());
+                
             };
 
             return config;
@@ -199,6 +205,8 @@ namespace PatternMatchingLib
             tempTable.Columns.Add("loadDate", typeof(string));
             tempTable.Columns.Add("iban", typeof(string));
             tempTable.Columns.Add("companyCode", typeof(string));
+            tempTable.Columns.Add("fixedGLAccountNumber", typeof(string));
+            tempTable.Columns.Add("documentCode", typeof(string));
             tempTable.Columns.Add("statementNumber", typeof(string));
             tempTable.Columns.Add("entryDate", typeof(string));
             tempTable.Columns.Add("valueDate", typeof(string));
@@ -213,7 +221,9 @@ namespace PatternMatchingLib
                                         dr["id"] = s.id; 
                                         dr["loadDate"] = s.loadDate; 
                                         dr["iban"] = s.iban; 
-                                        dr["companyCode"] = s.companyCode; 
+                                        dr["companyCode"] = s.companyCode;
+                                        dr["fixedGLAccountNumber"] = s.fixedGLAccountNumber;
+                                        dr["documentCode"] = s.documentCode;
                                         dr["statementNumber"] = s.statementNumber;
                                         dr["entryDate"] = s.entryDate; 
                                         dr["valueDate"] = s.valueDate; 
@@ -230,6 +240,50 @@ namespace PatternMatchingLib
             return tempTable;
         }
 
+        public DataTable TransformToMacroDataTable(List<Transaction> listTran)
+        {
+
+            DataTable tempTable = new DataTable();
+            tempTable.Columns.Add("iban", typeof(string));
+            tempTable.Columns.Add("colJpnr", typeof(string));
+            tempTable.Columns.Add("colDocnr", typeof(string));
+            tempTable.Columns.Add("colBedrijf", typeof(string));
+            tempTable.Columns.Add("colDocdd", typeof(string));
+            tempTable.Columns.Add("colJaar", typeof(string));
+            tempTable.Columns.Add("colPeriode", typeof(string));
+            tempTable.Columns.Add("colAutoriserendGebruiker", typeof(string));
+            tempTable.Columns.Add("colIntercomp", typeof(string));
+            tempTable.Columns.Add("colRekeningcode", typeof(string));
+            tempTable.Columns.Add("colBedreg", typeof(string));
+            tempTable.Columns.Add("colOmschrijving", typeof(string));
+            listTran.ForEach(s =>
+            {
+                var dr = tempTable.NewRow();
+                dr["iban"] = s.iban;
+                dr["colJpnr"] = "1";
+                dr["colDocnr"] = s.entryDate.Substring(s.entryDate.LastIndexOf("/")+1,4) + s.statementNumber + "0";
+                dr["colBedrijf"] = s.companyCode;
+                dr["colDocdd"] = s.entryDate;
+                dr["colJaar"] = s.valueDate.Substring(s.valueDate.LastIndexOf("/") + 1,4);
+                dr["colPeriode"] = s.valueDate.Substring(s.valueDate.IndexOf("/")+1,s.valueDate.LastIndexOf("/")-s.valueDate.IndexOf("/")-1);
+                dr["colAutoriserendGebruiker"] = "";
+                dr["colIntercomp"] = "";
+                dr["colRekeningcode"] = s.glAccountNumber;
+                var amt = Decimal.Parse(s.amount, System.Globalization.NumberStyles.AllowParentheses |
+                                                 System.Globalization.NumberStyles.AllowLeadingWhite |
+                                                 System.Globalization.NumberStyles.AllowTrailingWhite |
+                                                 System.Globalization.NumberStyles.AllowThousands |
+                                                 System.Globalization.NumberStyles.AllowDecimalPoint |
+                                                 System.Globalization.NumberStyles.AllowLeadingSign );
+                dr["colBedreg"] = amt *-1 ;
+                dr["colOmschrijving"] = s.codaDescription;
+                tempTable.Rows.Add(dr);
+                tempTable.AcceptChanges();
+            }
+                                );
+
+            return tempTable;
+        }
 
     }
 }
