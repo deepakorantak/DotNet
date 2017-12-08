@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace PatternMatchingLib
 {
-    public  class Start:CodeActivity
+    public class Start : CodeActivity
     {
         [Category("Input")]
         [RequiredArgument]
@@ -22,13 +22,13 @@ namespace PatternMatchingLib
         [RequiredArgument]
         public InArgument<DataTable> transactionMappingDataTable { get; set; }
 
-        [Category("Output")]        
+        [Category("Output")]
         public OutArgument<DataTable> mappedTransactionDataTable { get; set; }
 
 
         [Category("Output")]
         public OutArgument<List<Transaction>> mappedTransactionList { get; set; }
-       
+
         [Category("Output")]
         [RequiredArgument]
         public OutArgument<DataTable> mappedMacroDataTable { get; set; }
@@ -45,28 +45,28 @@ namespace PatternMatchingLib
             var resultTRans = Process(sourceDT, accountMappingDT, transactionMappingDT);
             mappedTransactionList.Set(context, resultTRans);
             mappedTransactionDataTable.Set(context, TransformToDataTable(resultTRans));
-            mappedMacroDataTable.Set(context,TransformToMacroDataTable(resultTRans));
+            mappedMacroDataTable.Set(context, TransformToMacroDataTable(resultTRans));
 
         }
 
-        public List<Transaction> Process(string sourceTransactiosPath,string accountMappingPath,string transactionmMappingPath)
+        public List<Transaction> Process(string sourceTransactiosPath, string accountMappingPath, string transactionmMappingPath)
         {
             sourceTrans = ProcessTransactionList.GetTransactions(sourceTransactiosPath, accountMappingPath);
             patternConfig = ProcessTransactionMappingList.GetTransactionMapping(transactionmMappingPath);
-            return  GetFinalTransactions();         
+            return GetFinalTransactions();
 
         }
 
-        public List<Transaction> Process(DataTable sourceTransactions, DataTable accountMapping,DataTable transactionMapping)
+        public List<Transaction> Process(DataTable sourceTransactions, DataTable accountMapping, DataTable transactionMapping)
         {
 
             sourceTrans = ProcessTransactionList.GetTransactions(sourceTransactions, accountMapping);
             patternConfig = ProcessTransactionMappingList.GetPatterns(transactionMapping);
 
-           return  GetFinalTransactions();           
+            return GetFinalTransactions();
         }
 
-        private  List<Transaction> GetFinalTransactions()
+        private List<Transaction> GetFinalTransactions()
         {
             var matchedList = patternConfig.Where(p => p.isAdditionPattern == "NA")
                                                   .SelectMany(p => { return MatchingBasicPattern(p); })
@@ -93,7 +93,7 @@ namespace PatternMatchingLib
             return sourceTrans;
         }
 
-        private  IEnumerable<Transaction> MatchingBasicPattern(TransctionMapping p)
+        private IEnumerable<Transaction> MatchingBasicPattern(TransctionMapping p)
         {
             var regex = new Regex(p.mainPattern);
             return sourceTrans.Where(s => regex.IsMatch(s.transactionDescription.ToLower()))
@@ -115,8 +115,8 @@ namespace PatternMatchingLib
                                }
                                 );
         }
- 
-        private  IEnumerable<Transaction> MatchingAdditionPattern(TransctionMapping p)
+
+        private IEnumerable<Transaction> MatchingAdditionPattern(TransctionMapping p)
         {
             var regexMain = new Regex(p.mainPattern);
             var regexAdd = new Regex(p.additionPattern);
@@ -142,7 +142,7 @@ namespace PatternMatchingLib
                                     );
         }
 
-        private  IEnumerable<Transaction> MatchingAFRPattern(TransctionMapping p)
+        private IEnumerable<Transaction> MatchingAFRPattern(TransctionMapping p)
         {
             var regexMain = new Regex(p.mainPattern);
 
@@ -165,7 +165,7 @@ namespace PatternMatchingLib
                                     );
         }
 
-        private  string GetAccount(string inputString, string matchingCode)
+        private string GetAccount(string inputString, string matchingCode)
         {
 
             var startindex = inputString.IndexOf(matchingCode, 0) + matchingCode.Count();
@@ -176,28 +176,28 @@ namespace PatternMatchingLib
             return res;
         }
 
-        private  string GetCODADescription(string config, string omschrijving)
+        private string GetCODADescription(string config, string omschrijving)
         {
 
             if (config.Contains("OMSCHRIJVING"))
             {
                 var s = config.Split('|');
-                var numChars = Int32.Parse(s[1].Replace("]",""));
-                var length = ( numChars > omschrijving.Length) ? omschrijving.Length : numChars ;
-                var res = omschrijving.Substring(0,length);
+                var numChars = Int32.Parse(s[1].Replace("]", ""));
+                var length = (numChars > omschrijving.Length) ? omschrijving.Length : numChars;
+                var res = omschrijving.Substring(0, length);
                 return res;
             };
 
             if (config.Contains("[MM YYYY]"))
             {
                 return config.Replace("[MM YYYY]", DateTime.Now.Month.ToString() + " " + DateTime.Now.Year.ToString());
-                
+
             };
 
             return config;
         }
 
-        public  DataTable TransformToDataTable(List<Transaction> listTran)
+        public DataTable TransformToDataTable(List<Transaction> listTran)
         {
 
             DataTable tempTable = new DataTable();
@@ -216,25 +216,25 @@ namespace PatternMatchingLib
             tempTable.Columns.Add("additionaInfo", typeof(string));
             tempTable.Columns.Add("codaDescription", typeof(string));
             listTran.ForEach(s =>
-                                    {
-                                        var dr = tempTable.NewRow();
-                                        dr["id"] = s.id; 
-                                        dr["loadDate"] = s.loadDate; 
-                                        dr["iban"] = s.iban; 
-                                        dr["companyCode"] = s.companyCode;
-                                        dr["fixedGLAccountNumber"] = s.fixedGLAccountNumber;
-                                        dr["documentCode"] = s.documentCode;
-                                        dr["statementNumber"] = s.statementNumber;
-                                        dr["entryDate"] = s.entryDate; 
-                                        dr["valueDate"] = s.valueDate; 
-                                        dr["transactionDescription"] = s.transactionDescription;
-                                        dr["amount"] = s.amount; ;
-                                        dr["glAccountNumber"] = s.glAccountNumber ;
-                                        dr["additionaInfo"] = s.additionaInfo ;
-                                        dr["codaDescription"] = s.codaDescription ;
-                                        tempTable.Rows.Add(dr);
-                                        tempTable.AcceptChanges();
-                                    }
+            {
+                var dr = tempTable.NewRow();
+                dr["id"] = s.id;
+                dr["loadDate"] = s.loadDate;
+                dr["iban"] = s.iban;
+                dr["companyCode"] = s.companyCode;
+                dr["fixedGLAccountNumber"] = s.fixedGLAccountNumber;
+                dr["documentCode"] = s.documentCode;
+                dr["statementNumber"] = s.statementNumber;
+                dr["entryDate"] = s.entryDate;
+                dr["valueDate"] = s.valueDate;
+                dr["transactionDescription"] = s.transactionDescription;
+                dr["amount"] = s.amount; ;
+                dr["glAccountNumber"] = s.glAccountNumber;
+                dr["additionaInfo"] = s.additionaInfo;
+                dr["codaDescription"] = s.codaDescription;
+                tempTable.Rows.Add(dr);
+                tempTable.AcceptChanges();
+            }
                                 );
 
             return tempTable;
@@ -261,11 +261,18 @@ namespace PatternMatchingLib
                 var dr = tempTable.NewRow();
                 dr["iban"] = s.iban;
                 dr["colJpnr"] = "1";
-                dr["colDocnr"] = s.entryDate.Substring(s.entryDate.LastIndexOf("/")+1,4) + s.statementNumber + "0";
+                if (s.iban.Contains("RABO"))
+                {
+                    dr["colDocnr"] = s.entryDate.Substring(s.entryDate.LastIndexOf("/") + 1, 4) + s.statementNumber;
+                }
+                else
+                {
+                    dr["colDocnr"] = s.entryDate.Substring(s.entryDate.LastIndexOf("/") + 1, 4) + s.statementNumber + "0";
+                }
                 dr["colBedrijf"] = s.companyCode;
                 dr["colDocdd"] = s.entryDate;
-                dr["colJaar"] = s.valueDate.Substring(s.valueDate.LastIndexOf("/") + 1,4);
-                dr["colPeriode"] = s.valueDate.Substring(s.valueDate.IndexOf("/")+1,s.valueDate.LastIndexOf("/")-s.valueDate.IndexOf("/")-1);
+                dr["colJaar"] = s.entryDate.Substring(s.entryDate.LastIndexOf("/") + 1, 4);
+                dr["colPeriode"] = s.entryDate.Substring(s.entryDate.IndexOf("/") + 1, s.entryDate.LastIndexOf("/") - s.entryDate.IndexOf("/") - 1);
                 dr["colAutoriserendGebruiker"] = "";
                 dr["colIntercomp"] = "";
                 dr["colRekeningcode"] = s.glAccountNumber;
@@ -274,8 +281,8 @@ namespace PatternMatchingLib
                                                  System.Globalization.NumberStyles.AllowTrailingWhite |
                                                  System.Globalization.NumberStyles.AllowThousands |
                                                  System.Globalization.NumberStyles.AllowDecimalPoint |
-                                                 System.Globalization.NumberStyles.AllowLeadingSign );
-                dr["colBedreg"] = amt *-1 ;
+                                                 System.Globalization.NumberStyles.AllowLeadingSign);
+                dr["colBedreg"] = amt * -1;
                 dr["colOmschrijving"] = s.codaDescription;
                 tempTable.Rows.Add(dr);
                 tempTable.AcceptChanges();
